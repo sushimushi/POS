@@ -79,11 +79,11 @@ function Users() {
                 <tr>
                   <TableCell>
                     <Input type="checkbox" className="mr-2" />
-                    All
+                    Cashier Name
                   </TableCell>
-                  <TableCell>Register Name</TableCell>
-                  <TableCell>Receipt Number Prefix</TableCell>
-                  <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+                  <TableCell>Cashier PIN</TableCell>
+                  <TableCell>Has Manager Permissions?</TableCell>
+                  <TableCell>Cashier Register</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
@@ -139,11 +139,9 @@ function Users() {
                 <tr>
                   <TableCell>
                     <Input type="checkbox" className="mr-2" />
-                    All
+                    App User Name
                   </TableCell>
-                  <TableCell>Register Name</TableCell>
-                  <TableCell>Receipt Number Prefix</TableCell>
-                  <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+                  <TableCell>App User PIN</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
@@ -170,14 +168,6 @@ function Users() {
                     <TableCell>
                       <span className="text-sm">$ {user.amount}</span>
                     </TableCell>
-                    <TableCell>
-                      <Badge type={user.status}>{user.status}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
-                      </span>
-                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -199,11 +189,10 @@ function Users() {
                 <tr>
                   <TableCell>
                     <Input type="checkbox" className="mr-2" />
-                    All
+                    Waiter Name
                   </TableCell>
-                  <TableCell>Register Name</TableCell>
-                  <TableCell>Receipt Number Prefix</TableCell>
-                  <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+                  <TableCell>Waiter PIN</TableCell>
+                  <TableCell>Waiter Register</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
@@ -233,11 +222,6 @@ function Users() {
                     <TableCell>
                       <Badge type={user.status}>{user.status}</Badge>
                     </TableCell>
-                    <TableCell>
-                      <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
-                      </span>
-                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -259,11 +243,10 @@ function Users() {
                 <tr>
                   <TableCell>
                     <Input type="checkbox" className="mr-2" />
-                    All
+                    Kitchen Name
                   </TableCell>
-                  <TableCell>Register Name</TableCell>
-                  <TableCell>Receipt Number Prefix</TableCell>
-                  <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+                  <TableCell>Kitchen PIN</TableCell>
+                  <TableCell>Kitchen Register</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
@@ -292,11 +275,6 @@ function Users() {
                     </TableCell>
                     <TableCell>
                       <Badge type={user.status}>{user.status}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
-                      </span>
                     </TableCell>
                   </TableRow>
                 ))}
