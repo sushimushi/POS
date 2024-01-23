@@ -74,11 +74,13 @@ function ProductsList() {
               <tr>
                 <TableCell>
                   <Input type="checkbox" className="mr-2" />
-                  All
+                  Product Name
                 </TableCell>
-                <TableCell>Register Name</TableCell>
-                <TableCell>Receipt Number Prefix</TableCell>
-                <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+                <TableCell>Product Options</TableCell>
+                <TableCell>Product Category</TableCell>
+                <TableCell>Tax Group</TableCell>
+                <TableCell>Product Price</TableCell>
+                <TableCell>Sort Order</TableCell>
               </tr>
             </TableHeader>
             <TableBody>
@@ -107,6 +109,16 @@ function ProductsList() {
                   </TableCell>
                   <TableCell>
                     <Badge type={user.status}>{user.status}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">
+                      {new Date(user.date).toLocaleDateString()}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">
+                      {new Date(user.date).toLocaleDateString()}
+                    </span>
                   </TableCell>
                   <TableCell>
                     <span className="text-sm">
