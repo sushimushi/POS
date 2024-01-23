@@ -76,7 +76,7 @@ function Header({ pageHeader }) {
             </button>
           </li>
           {/* <!-- Notifications menu --> */}
-          <li className="relative">
+          {/* <li className="relative">
             <button
               className="relative align-middle rounded-md focus:outline-none focus:shadow-outline-purple"
               onClick={handleNotificationsClick}
@@ -84,7 +84,6 @@ function Header({ pageHeader }) {
               aria-haspopup="true"
             >
               <BellIcon className="w-5 h-5" aria-hidden="true" />
-              {/* <!-- Notification badge --> */}
               <span
                 aria-hidden="true"
                 className="absolute top-0 right-0 inline-block w-3 h-3 transform translate-x-1 -translate-y-1 bg-red-600 border-2 border-white rounded-full dark:border-gray-800"
@@ -108,7 +107,7 @@ function Header({ pageHeader }) {
                 <span>Alerts</span>
               </DropdownItem>
             </Dropdown>
-          </li>
+          </li> */}
           {/* <!-- Profile menu --> */}
           {/* <li className="relative">
             <button
