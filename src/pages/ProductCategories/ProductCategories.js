@@ -74,11 +74,9 @@ function ProductCategories() {
                 <tr>
                   <TableCell>
                     <Input type="checkbox" className="mr-2" />
-                    All
+                    Product Category Name
                   </TableCell>
-                  <TableCell>Register Name</TableCell>
-                  <TableCell>Receipt Number Prefix</TableCell>
-                  <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+                  <TableCell>Sort Order</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
@@ -105,14 +103,6 @@ function ProductCategories() {
                     <TableCell>
                       <span className="text-sm">$ {user.amount}</span>
                     </TableCell>
-                    <TableCell>
-                      <Badge type={user.status}>{user.status}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
-                      </span>
-                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -134,11 +124,8 @@ function ProductCategories() {
                 <tr>
                   <TableCell>
                     <Input type="checkbox" className="mr-2" />
-                    All
+                    Order Ticket Group Name
                   </TableCell>
-                  <TableCell>Register Name</TableCell>
-                  <TableCell>Receipt Number Prefix</TableCell>
-                  <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
@@ -161,17 +148,6 @@ function ProductCategories() {
                           </Link>
                         </div>
                       </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">$ {user.amount}</span>
-                    </TableCell>
-                    <TableCell>
-                      <Badge type={user.status}>{user.status}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
-                      </span>
                     </TableCell>
                   </TableRow>
                 ))}

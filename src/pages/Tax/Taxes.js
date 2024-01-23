@@ -74,11 +74,10 @@ function Taxes() {
                 <tr>
                   <TableCell>
                     <Input type="checkbox" className="mr-2" />
-                    All
+                    Tax Name
                   </TableCell>
-                  <TableCell>Register Name</TableCell>
-                  <TableCell>Receipt Number Prefix</TableCell>
-                  <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+                  <TableCell>Tax Percent</TableCell>
+                  <TableCell>Is Linked To A Tax Group?</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
@@ -108,11 +107,6 @@ function Taxes() {
                     <TableCell>
                       <Badge type={user.status}>{user.status}</Badge>
                     </TableCell>
-                    <TableCell>
-                      <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
-                      </span>
-                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -134,11 +128,10 @@ function Taxes() {
                 <tr>
                   <TableCell>
                     <Input type="checkbox" className="mr-2" />
-                    All
+                    Tax Group Name
                   </TableCell>
-                  <TableCell>Register Name</TableCell>
-                  <TableCell>Receipt Number Prefix</TableCell>
-                  <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+                  <TableCell>Net Tax Percent</TableCell>
+                  <TableCell>Is Tax Included In Product Price?</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
@@ -167,11 +160,6 @@ function Taxes() {
                     </TableCell>
                     <TableCell>
                       <Badge type={user.status}>{user.status}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
-                      </span>
                     </TableCell>
                   </TableRow>
                 ))}

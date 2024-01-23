@@ -60,11 +60,10 @@ function Registers() {
                 <tr>
                   <TableCell>
                     <Input type="checkbox" className="mr-2" />
-                    All
+                    Register Name
                   </TableCell>
-                  <TableCell>Register Name</TableCell>
                   <TableCell>Receipt Number Prefix</TableCell>
-                  <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+                  <TableCell>Print Receipts? (for TheGenie Web)</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
@@ -93,11 +92,6 @@ function Registers() {
                     </TableCell>
                     <TableCell>
                       <Badge type={user.status}>{user.status}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
-                      </span>
                     </TableCell>
                   </TableRow>
                 ))}
