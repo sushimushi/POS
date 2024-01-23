@@ -72,13 +72,11 @@ function CustomersList() {
           <Table>
             <TableHeader>
               <tr>
-                <TableCell>
-                  <Input type="checkbox" className="mr-2" />
-                  All
-                </TableCell>
-                <TableCell>Register Name</TableCell>
-                <TableCell>Receipt Number Prefix</TableCell>
-                <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+                <TableCell>Mobile</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Order Count</TableCell>
+                <TableCell>Order Value</TableCell>
+                <TableCell>Last Seen</TableCell>
               </tr>
             </TableHeader>
             <TableBody>
@@ -86,12 +84,6 @@ function CustomersList() {
                 <TableRow key={i}>
                   <TableCell>
                     <div className="flex items-center text-sm">
-                      <Input
-                        type="checkbox"
-                        name={user.name}
-                        id={user.name}
-                        className="mr-2"
-                      />
                       <div>
                         <Link
                           to={"/app/customer/" + i}
@@ -107,6 +99,11 @@ function CustomersList() {
                   </TableCell>
                   <TableCell>
                     <Badge type={user.status}>{user.status}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">
+                      {new Date(user.date).toLocaleDateString()}
+                    </span>
                   </TableCell>
                   <TableCell>
                     <span className="text-sm">
