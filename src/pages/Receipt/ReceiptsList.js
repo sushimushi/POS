@@ -70,41 +70,37 @@ function Receipts() {
             <Table>
               <TableHeader>
                 <tr>
-                  <TableCell>
-                    <Input type="checkbox" className="mr-2" />
-                    All
-                  </TableCell>
-                  <TableCell>Register Name</TableCell>
-                  <TableCell>Receipt Number Prefix</TableCell>
-                  <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+                  <TableCell>Receipt Number</TableCell>
+                  <TableCell>Created At</TableCell>
+                  <TableCell>Customer Mobile</TableCell>
+                  <TableCell>Fulfillment Status</TableCell>
+                  <TableCell>Payment Status</TableCell>
+                  <TableCell>Total</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
                 {dataTable1.map((user, i) => (
                   <TableRow key={i}>
                     <TableCell>
-                      <div className="flex items-center text-sm">
-                        <Input
-                          type="checkbox"
-                          name={user.name}
-                          id={user.name}
-                          className="mr-2"
-                        />
-                        <div>
-                          <Link
-                            to={"/app/receipt/" + i}
-                            className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
-                          >
-                            {user.name}
-                          </Link>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
                       <span className="text-sm">$ {user.amount}</span>
                     </TableCell>
                     <TableCell>
                       <Badge type={user.status}>{user.status}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm">
+                        {new Date(user.date).toLocaleDateString()}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm">
+                        {new Date(user.date).toLocaleDateString()}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm">
+                        {new Date(user.date).toLocaleDateString()}
+                      </span>
                     </TableCell>
                     <TableCell>
                       <span className="text-sm">
