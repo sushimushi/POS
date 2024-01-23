@@ -41,8 +41,6 @@ function Sell() {
   // setup data for every table
   const [dataTable1, setDataTable1] = useState([]);
 
-  // setup data for every tables
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // pagination setup
   const resultsPerPage = 10;

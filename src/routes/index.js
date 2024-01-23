@@ -99,7 +99,7 @@ const routes = [
     title: "Sell",
   },
   {
-    path: "/sell/order",
+    path: "/sell/order/:id",
     component: Order,
     title: "Order",
   },

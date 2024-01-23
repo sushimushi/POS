@@ -6,7 +6,7 @@ import Tables from "./Tables";
 
 import response from "../../utils/demo/tableData";
 const response2 = response.concat([]);
-import ModalPage from "../../components/Modal";
+// import ModalPage from "../../components/Modal";
 
 function Sell() {
   /**
@@ -57,11 +57,11 @@ function Sell() {
       <div className="py-4">
         <Tables />
       </div>
-      <ModalPage
+      {/* <ModalPage
         data={"data"}
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
-      />
+      /> */}
     </>
   );
 }
