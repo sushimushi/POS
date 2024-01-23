@@ -84,7 +84,10 @@ function Order() {
           </div>
         </div>
         <div className="col-span-4">
-          <div className="bg-gray-100 rounded px-4 py-2">
+          <div className="bg-gray-100 rounded px-4 pt-4">
+            <div className="text-xs">
+              Table 2 | <span className="text-blue-500">Add Customer</span>
+            </div>
             <div className="my-2">
               <Controller
                 name="registerName"
@@ -131,23 +134,27 @@ function Order() {
                 </thead>
                 <tbody>
                   {orderData && (
-                    <tr>
-                      <td className="text-sm text-left">burger</td>
-                      <td className="text-sm text-left">$100</td>
-                      <td className="text-sm text-left">
-                        <OrderItem />
-                      </td>
-                    </tr>
+                    <>
+                      <tr>
+                        <td className="text-xs text-left pt-1">burger</td>
+                        <td className="text-xs text-left pt-1">$100</td>
+                        <td className="text-xs text-left pt-1">
+                          <OrderItem />
+                        </td>
+                      </tr>
+                    </>
                   )}
                 </tbody>
               </table>
-              <p className="text-xs pb-8 pt-2">
-                Add items by selecting from the list. If you want to remove this
-                saved draft, click clear.
-              </p>
+              {!orderData && (
+                <p className="text-xs pb-8 pt-2">
+                  Add items by selecting from the list. If you want to remove
+                  this saved draft, click clear.
+                </p>
+              )}
               {orderData && (
                 <div className="text-center">
-                  <button className="text-blue-500 font-semibold text-xs">
+                  <button className="text-blue-500 font-semibold text-xs mb-2">
                     Bulk Discount
                   </button>
                 </div>
@@ -183,10 +190,14 @@ const OrderItem = (OrderCount) => {
   };
 
   return (
-    <div className="flex items-center justify-around">
-      <button onClick={decrement}>-</button>
-      <span>{count}</span>
-      <button onClick={increment}>+</button>
+    <div className="flex items-center justify-between">
+      <button className="bg-gray-300 rounded p-1" onClick={decrement}>
+        -
+      </button>
+      <span className="">{count}</span>
+      <button className="bg-gray-300 rounded p-1" onClick={increment}>
+        +
+      </button>
     </div>
   );
 };
