@@ -84,7 +84,10 @@ function Order() {
           </div>
         </div>
         <div className="col-span-4">
-          <div className="bg-gray-100 rounded px-4 py-2">
+          <div className="bg-gray-100 rounded px-4 pt-4">
+            <div className="text-xs">
+              Table 2 | <span className="text-blue-500">Add Customer</span>
+            </div>
             <div className="my-2">
               <Controller
                 name="registerName"
