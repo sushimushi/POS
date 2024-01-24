@@ -119,11 +119,12 @@ function Variants() {
           <tr>
             <TableCell>
               <Input type="checkbox" className="mr-2" />
-              All
+              Variant Name
             </TableCell>
-            <TableCell>Register Name</TableCell>
-            <TableCell>Receipt Number Prefix</TableCell>
-            <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+            <TableCell>Variant Comment</TableCell>
+            <TableCell>Price</TableCell>
+            <TableCell>Sort Order</TableCell>
+            <TableCell>Is Linked To A Variant Group?</TableCell>
           </tr>
         </TableHeader>
         <TableBody>
@@ -152,6 +153,11 @@ function Variants() {
               </TableCell>
               <TableCell>
                 <Badge type={user.status}>{user.status}</Badge>
+              </TableCell>
+              <TableCell>
+                <span className="text-sm">
+                  {new Date(user.date).toLocaleDateString()}
+                </span>
               </TableCell>
               <TableCell>
                 <span className="text-sm">
@@ -207,11 +213,10 @@ function VariantsGroups() {
         <tr>
           <TableCell>
             <Input type="checkbox" className="mr-2" />
-            All
+            Variant Group Name
           </TableCell>
-          <TableCell>Register Name</TableCell>
-          <TableCell>Receipt Number Prefix</TableCell>
-          <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+          <TableCell>Variants</TableCell>
+          <TableCell>Sort Order</TableCell>
         </tr>
       </TableHeader>
       <TableBody>
@@ -240,11 +245,6 @@ function VariantsGroups() {
             </TableCell>
             <TableCell>
               <Badge type={user.status}>{user.status}</Badge>
-            </TableCell>
-            <TableCell>
-              <span className="text-sm">
-                {new Date(user.date).toLocaleDateString()}
-              </span>
             </TableCell>
           </TableRow>
         ))}
@@ -295,11 +295,11 @@ function Addons() {
         <tr>
           <TableCell>
             <Input type="checkbox" className="mr-2" />
-            All
+            Addon Name
           </TableCell>
-          <TableCell>Register Name</TableCell>
-          <TableCell>Receipt Number Prefix</TableCell>
-          <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+          <TableCell>Price</TableCell>
+          <TableCell>Sort Order</TableCell>
+          <TableCell>Is Linked To A Addon Group?</TableCell>
         </tr>
       </TableHeader>
       <TableBody>
@@ -383,11 +383,10 @@ function AddonsGroups() {
         <tr>
           <TableCell>
             <Input type="checkbox" className="mr-2" />
-            All
+            Addon Group Name
           </TableCell>
-          <TableCell>Register Name</TableCell>
-          <TableCell>Receipt Number Prefix</TableCell>
-          <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+          <TableCell>Addons</TableCell>
+          <TableCell>Sort Order</TableCell>
         </tr>
       </TableHeader>
       <TableBody>
@@ -416,11 +415,6 @@ function AddonsGroups() {
             </TableCell>
             <TableCell>
               <Badge type={user.status}>{user.status}</Badge>
-            </TableCell>
-            <TableCell>
-              <span className="text-sm">
-                {new Date(user.date).toLocaleDateString()}
-              </span>
             </TableCell>
           </TableRow>
         ))}
@@ -471,11 +465,9 @@ function ItemGroups() {
         <tr>
           <TableCell>
             <Input type="checkbox" className="mr-2" />
-            All
+            Item Group Name
           </TableCell>
-          <TableCell>Register Name</TableCell>
-          <TableCell>Receipt Number Prefix</TableCell>
-          <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+          <TableCell>Items</TableCell>
         </tr>
       </TableHeader>
       <TableBody>
@@ -501,14 +493,6 @@ function ItemGroups() {
             </TableCell>
             <TableCell>
               <span className="text-sm">$ {user.amount}</span>
-            </TableCell>
-            <TableCell>
-              <Badge type={user.status}>{user.status}</Badge>
-            </TableCell>
-            <TableCell>
-              <span className="text-sm">
-                {new Date(user.date).toLocaleDateString()}
-              </span>
             </TableCell>
           </TableRow>
         ))}

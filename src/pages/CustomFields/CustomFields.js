@@ -75,11 +75,9 @@ function DiscountRules() {
                 <tr>
                   <TableCell>
                     <Input type="checkbox" className="mr-2" />
-                    All
+                    Payment Name
                   </TableCell>
-                  <TableCell>Register Name</TableCell>
-                  <TableCell>Receipt Number Prefix</TableCell>
-                  <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+                  <TableCell>Description</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
@@ -106,14 +104,6 @@ function DiscountRules() {
                     <TableCell>
                       <span className="text-sm">$ {user.amount}</span>
                     </TableCell>
-                    <TableCell>
-                      <Badge type={user.status}>{user.status}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
-                      </span>
-                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -135,11 +125,9 @@ function DiscountRules() {
                 <tr>
                   <TableCell>
                     <Input type="checkbox" className="mr-2" />
-                    All
+                    Petty Cash Category
                   </TableCell>
-                  <TableCell>Register Name</TableCell>
-                  <TableCell>Receipt Number Prefix</TableCell>
-                  <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+                  <TableCell>Description</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
@@ -166,14 +154,6 @@ function DiscountRules() {
                     <TableCell>
                       <span className="text-sm">$ {user.amount}</span>
                     </TableCell>
-                    <TableCell>
-                      <Badge type={user.status}>{user.status}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
-                      </span>
-                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -195,11 +175,10 @@ function DiscountRules() {
                 <tr>
                   <TableCell>
                     <Input type="checkbox" className="mr-2" />
-                    All
+                    Additional Detail Name
                   </TableCell>
-                  <TableCell>Register Name</TableCell>
-                  <TableCell>Receipt Number Prefix</TableCell>
-                  <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+                  <TableCell>Additional Detail Type</TableCell>
+                  <TableCell>Is Printable On Receipt?</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
@@ -229,11 +208,6 @@ function DiscountRules() {
                     <TableCell>
                       <Badge type={user.status}>{user.status}</Badge>
                     </TableCell>
-                    <TableCell>
-                      <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
-                      </span>
-                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -255,11 +229,11 @@ function DiscountRules() {
                 <tr>
                   <TableCell>
                     <Input type="checkbox" className="mr-2" />
-                    All
+                    Tag Name
                   </TableCell>
-                  <TableCell>Register Name</TableCell>
-                  <TableCell>Receipt Number Prefix</TableCell>
-                  <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+                  <TableCell>Tag Type</TableCell>
+                  <TableCell>Tag Colour</TableCell>
+                  <TableCell>Is Printable On Receipt?</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>

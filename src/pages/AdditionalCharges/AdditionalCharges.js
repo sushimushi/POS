@@ -70,11 +70,12 @@ function AdditionalCharges() {
                 <tr>
                   <TableCell>
                     <Input type="checkbox" className="mr-2" />
-                    All
+                    Additional Charge Name
                   </TableCell>
-                  <TableCell>Register Name</TableCell>
-                  <TableCell>Receipt Number Prefix</TableCell>
-                  <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+                  <TableCell>Type</TableCell>
+                  <TableCell>Value</TableCell>
+                  <TableCell>Tax Group</TableCell>
+                  <TableCell>Is Automatically Added?</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
@@ -103,6 +104,11 @@ function AdditionalCharges() {
                     </TableCell>
                     <TableCell>
                       <Badge type={user.status}>{user.status}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm">
+                        {new Date(user.date).toLocaleDateString()}
+                      </span>
                     </TableCell>
                     <TableCell>
                       <span className="text-sm">

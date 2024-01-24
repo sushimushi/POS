@@ -74,11 +74,14 @@ function DiscountRules() {
                 <tr>
                   <TableCell>
                     <Input type="checkbox" className="mr-2" />
-                    All
+                    Coupon Code
                   </TableCell>
-                  <TableCell>Register Name</TableCell>
-                  <TableCell>Receipt Number Prefix</TableCell>
-                  <TableCell>Print Receipts? (for SlickPOS Web)</TableCell>
+                  <TableCell>Type</TableCell>
+                  <TableCell>Level</TableCell>
+                  <TableCell>Discount</TableCell>
+                  <TableCell>Start Date</TableCell>
+                  <TableCell>End Date</TableCell>
+                  <TableCell>Status</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
@@ -107,6 +110,21 @@ function DiscountRules() {
                     </TableCell>
                     <TableCell>
                       <Badge type={user.status}>{user.status}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm">
+                        {new Date(user.date).toLocaleDateString()}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm">
+                        {new Date(user.date).toLocaleDateString()}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm">
+                        {new Date(user.date).toLocaleDateString()}
+                      </span>
                     </TableCell>
                     <TableCell>
                       <span className="text-sm">
