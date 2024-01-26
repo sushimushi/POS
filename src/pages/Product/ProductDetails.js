@@ -1,27 +1,24 @@
 import React, { useState, useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
+import { CameraLinedIcon } from "../../icons";
 import { Input, Button, Textarea, Select } from "@windmill/react-ui";
 
-function ProductDetails() {
+function ProductCategoriesDetails() {
   const { register, control, handleSubmit, watch, formState } = useForm();
 
   const submitHandler = (data) => console.log(data);
   return (
     <>
       <div
-        className="px-4 pt-3 lg:grid grid-cols-[200px,1fr]"
+        className="px-4 pt-3 lg:grid grid-cols-[200px,1fr] gap-4"
         style={{ gridTemplateColumns: "max(380px) 1fr" }}
       >
         <div className="mt-4 ml-4">
           <h2 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-2">
-            Your Register Details
+          Your Product Details
           </h2>
           <span className="block text-sm text-gray-700 dark:text-gray-200 mb-4">
-            Enable receipt printing to print receipts while billing with this
-            register.
-          </span>
-          <span className="block text-sm text-gray-700 dark:text-gray-200 mb-2">
-            By default, The shop name will be printed on the receipt.
+          Edit your product details here. Product name should be unique.
           </span>
         </div>
 
@@ -29,209 +26,114 @@ function ProductDetails() {
           onSubmit={handleSubmit(submitHandler)}
           className="px-4 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
         >
-          {/* Register Name */}
+          {/* Product Name */}
           <div className="my-4">
             <label
-              htmlFor="registerName"
+              htmlFor="productCategoryName"
               className="block text-sm font-medium text-gray-600"
             >
-              Register Name
+              Product Name
             </label>
             <Controller
-              name="registerName"
+              name="productName"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="registerName"
+                  id="productName"
                   type="text"
                   {...field}
-                  placeholder="Enter your Register Name"
+                  placeholder="Product name"
                   className="mt-1"
                 />
               )}
             />
           </div>
 
-          {/* Receipt Number Prefix */}
+          {/* Product Category */}
           <div className="mb-4">
             <label
-              htmlFor="receiptNumberPrefix"
+              htmlFor="productCategory"
               className="block text-sm font-medium text-gray-600"
             >
-              Receipt Number Prefix
+              Product Category
             </label>
             <Controller
-              name="receiptNumberPrefix"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Input
-                  id="receiptNumberPrefix"
-                  type="text"
-                  {...field}
-                  placeholder="Receipt Number Prefix"
-                  className="mt-1"
-                />
-              )}
-            />
-          </div>
-
-          {/* Bill Header */}
-          <div className="mb-4">
-            <label
-              htmlFor="billHeader"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Bill Header
-            </label>
-            <Controller
-              name="billHeader"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Textarea
-                  id="billHeader"
-                  {...field}
-                  placeholder="Bill Header Content (Optional)"
-                  className="mt-1"
-                />
-              )}
-            />
-          </div>
-
-          {/* Bill Footer */}
-          <div className="mb-4">
-            <label
-              htmlFor="billFooter"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Bill Footer Content
-            </label>
-            <Controller
-              name="billFooter"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Textarea
-                  id="billFooter"
-                  {...field}
-                  placeholder="Bill Footer Content (Optional)"
-                  className="mt-1"
-                />
-              )}
-            />
-          </div>
-
-          {/* Printer type */}
-          <div className="mb-4">
-            <label
-              htmlFor="printerType"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Printer Type
-            </label>
-            <Controller
-              name="printerType"
+              name="productCategory"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Select id="selectOption" {...field} className="mt-1">
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
+                  <option value="Main Kitchen">General</option>
                 </Select>
               )}
             />
           </div>
 
-          {/* Print receipts and order tickets */}
-          <div className="mb-4 flex items-center gap-2">
+            {/* Tax Group */}
+            <div className="mb-4">
+            <label
+              htmlFor="taxGroup"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Tax Group
+            </label>
             <Controller
-              name="printReceiptsAndOrderTickets"
+              name="taxGroup"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <Select id="selectOption" {...field} className="mt-1">
+                  <option value="Main Kitchen">Zero Tax Group</option>
+                </Select>
+              )}
+            />
+          </div>
+
+          {/* Product Price */}
+          <div className="my-4">
+            <label
+              htmlFor="productPrice"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Sort Order
+            </label>
+            <Controller
+              name="productPrice"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="printReceiptsAndOrderTickets"
-                  type="checkbox"
+                  id="productPrice"
+                  type="text"
                   {...field}
-                  placeholder="Stale time in minutes (Optional)"
-                  className=""
-                />
-              )}
-            />
-            <label
-              htmlFor="printReceiptsAndOrderTickets"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Print receipts and order tickets (for Web)
-            </label>
-          </div>
-
-          {/* Include shop logo in printed receipts */}
-          <div className="mb-4 flex items-center gap-2">
-            <Controller
-              name="includeShopLogoInPrintedReceipts"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Input
-                  id="includeShopLogoInPrintedReceipts"
-                  type="checkbox"
-                  {...field}
-                  placeholder="Stale time in minutes (Optional)"
-                  className=""
-                />
-              )}
-            />
-            <label
-              htmlFor="includeShopLogoInPrintedReceipts"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Include shop logo in printed receipts (for Web)
-            </label>
-          </div>
-
-          {/* Table Number */}
-          <div className="mb-4">
-            <label
-              htmlFor="tableNumbers"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Table Numbers
-            </label>
-            <Controller
-              name="tableNumbers"
-              control={control}
-              defaultValue="1-10"
-              render={({ field }) => (
-                <Textarea
-                  id="tableNumbers"
-                  {...field}
-                  placeholder="1-10"
+                  placeholder="Product Price"
                   className="mt-1"
                 />
               )}
             />
           </div>
+
+          <Button className="mb-4 mr-2" type="button">
+            Go Back
+          </Button>
 
           <Button className="mb-4" type="submit">
             Save
           </Button>
         </form>
       </div>
+
       <div
-        className="px-4 py-3 mb-8 lg:grid grid-cols-[200px,1fr]"
+        className="px-4 pt-3 lg:grid grid-cols-[200px,1fr] gap-4"
         style={{ gridTemplateColumns: "max(380px) 1fr" }}
       >
         <div className="mt-4 ml-4">
           <h2 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-2">
-            Your Waiter App / Kitchen Display System (KDS) Settings.
+          Product Options
           </h2>
-          <span className="block text-sm text-gray-700 dark:text-gray-200 mb-2">
-            To enable Waiter app / KDS, configure the IP address of the SlickPOS
-            Desktop. The Waiter app and KDS should be on the same network.
+          <span className="block text-sm text-gray-700 dark:text-gray-200 mb-4">
+          You can add one ore more variant groups and an add-on group to the product.
           </span>
         </div>
 
@@ -239,124 +141,176 @@ function ProductDetails() {
           onSubmit={handleSubmit(submitHandler)}
           className="px-4 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
         >
-          {/* Server IP Address For Waiter / KDS App */}
-          <div className="mb-4 mt-4">
+          {/* Product Name */}
+          <div className="my-4">
             <label
-              htmlFor="serverIp"
+              htmlFor="productCategoryName"
               className="block text-sm font-medium text-gray-600"
             >
-              Server IP Address For Waiter / KDS App
+              Product Name
             </label>
             <Controller
-              name="serverIp"
+              name="productName"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="serverIp"
+                  id="productName"
                   type="text"
                   {...field}
-                  placeholder="Server IP Address For Waiter / KDS App (Optional)"
+                  placeholder="Product name"
                   className="mt-1"
                 />
               )}
             />
           </div>
 
-          {/* KDS Stale Time  */}
-          <div className="mb-4">
+          <Button className="mb-4 mr-2" type="button">
+            Go Back
+          </Button>
+
+          <Button className="mb-4" type="submit">
+            Save
+          </Button>
+        </form>
+      </div>
+
+      <div
+        className="px-4 pt-3 lg:grid grid-cols-[200px,1fr] gap-4"
+        style={{ gridTemplateColumns: "max(380px) 1fr" }}
+      >
+        <div className="mt-4 ml-4">
+          <h2 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-2">
+          Product Additional Details
+          </h2>
+          <span className="block text-sm text-gray-700 dark:text-gray-200 mb-4">
+          Additional details about the product.
+          </span>
+        </div>
+
+        <form
+          onSubmit={handleSubmit(submitHandler)}
+          className="px-4 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
+        >
+          {/* Unit of Measure */}
+          <div className="my-4">
             <label
-              htmlFor="kdsStaleTime"
+              htmlFor="unitOfMeasure"
               className="block text-sm font-medium text-gray-600"
             >
-              KDS Stale Time
+              Unit of Measure
             </label>
             <Controller
-              name="kdsStaleTime"
+              name="unitOfMeasure"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="kdsStaleTime"
+                  id="unitOfMeasure"
                   type="text"
                   {...field}
-                  placeholder="Stale time in minutes (Optional)"
+                  placeholder="Unit of Measure (optional)"
                   className="mt-1"
                 />
               )}
             />
           </div>
 
-          {/* Enable accept status for orders in KDS */}
-          <div className="mb-4 flex items-center gap-2">
+          {/* Product Code */}
+          <div className="my-4">
+            <label
+              htmlFor="productCode"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Product Code
+            </label>
             <Controller
-              name="acceptStatusForOrdersInKDS"
+              name="productCode"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="acceptStatusForOrdersInKDS"
-                  type="checkbox"
+                  id="productCode"
+                  type="text"
                   {...field}
-                  placeholder="Stale time in minutes (Optional)"
-                  className=""
+                  placeholder="Product Code (optional)"
+                  className="mt-1"
                 />
               )}
             />
-            <label
-              htmlFor="acceptStatusForOrdersInKDS"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Enable accept status for orders in KDS
-            </label>
           </div>
 
-          {/* Enable served status for orders in KDS */}
-          <div className="mb-4 flex items-center gap-2">
+          {/* Notes */}
+          <div className="my-4">
+            <label
+              htmlFor="notes"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Notes
+            </label>
             <Controller
-              name="acceptServedForOrdersInKDS"
+              name="notes"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="acceptServedForOrdersInKDS"
-                  type="checkbox"
+                  id="notes"
+                  type="text"
                   {...field}
-                  placeholder="Stale time in minutes (Optional)"
-                  className=""
+                  placeholder="Notes (optional)"
+                  className="mt-1"
                 />
               )}
             />
+          </div>
+
+            {/* Limit to Register */}
+            <div className="mb-4">
             <label
-              htmlFor="acceptServedForOrdersInKDS"
+              htmlFor="limitToRegister"
               className="block text-sm font-medium text-gray-600"
             >
-              Enable accept served for orders in KDS
+              Limit to Register
             </label>
-          </div>
-          {/* Allow to change status at item level in KDS */}
-          <div className="mb-4 flex items-center gap-2">
             <Controller
-              name="allowToChangeStatusAtItemLevelInKDS"
+              name="limitToRegister"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <Select id="selectOption" {...field} className="mt-1">
+                  <option value="Main Kitchen">All Register</option>
+                </Select>
+              )}
+            />
+          </div>
+
+          {/* Sort Order */}
+          <div className="my-4">
+            <label
+              htmlFor="sortOrder"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Sort Order
+            </label>
+            <Controller
+              name="sortOrder"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="allowToChangeStatusAtItemLevelInKDS"
-                  type="checkbox"
+                  id="sortOrder"
+                  type="number"
                   {...field}
-                  placeholder="Stale time in minutes (Optional)"
-                  className=""
+                  placeholder="Sort Order"
+                  className="mt-1"
                 />
               )}
             />
-            <label
-              htmlFor="allowToChangeStatusAtItemLevelInKDS"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Allow to change status at item level in KDS
-            </label>
           </div>
+
+          <Button className="mb-4 mr-2" type="button">
+            Go Back
+          </Button>
 
           <Button className="mb-4" type="submit">
             Save
@@ -367,4 +321,4 @@ function ProductDetails() {
   );
 }
 
-export default ProductDetails;
+export default ProductCategoriesDetails;

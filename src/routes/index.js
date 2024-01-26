@@ -119,7 +119,7 @@ const routes = [
     title: "Products",
   },
   {
-    path: "/product-details/:id",
+    path: "/product/:id",
     component: ProductsDetails,
     title: "Products Details",
   },

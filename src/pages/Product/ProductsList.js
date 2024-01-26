@@ -96,7 +96,7 @@ function ProductsList() {
                       />
                       <div>
                         <Link
-                          to={"/app/settings/product-categories/" + i}
+                          to={"/app/product/" + i}
                           className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                         >
                           {user.name}
