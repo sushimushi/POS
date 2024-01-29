@@ -15,11 +15,10 @@ function ProductCategoriesDetails() {
       >
         <div className="mt-4 ml-4">
           <h2 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-2">
-            Your Product Category Details
+            Setup Item Group
           </h2>
           <span className="block text-sm text-gray-700 dark:text-gray-200 mb-4">
-            Products will be grouped under these categories in the sales
-            register.
+            Create an item group that can be attached to a combo.
           </span>
         </div>
 
@@ -27,58 +26,38 @@ function ProductCategoriesDetails() {
           onSubmit={handleSubmit(submitHandler)}
           className="px-4 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
         >
-          {/* Product Category Name */}
+          {/* Item Group Name */}
           <div className="my-4">
             <label
-              htmlFor="productCategoryName"
+              htmlFor="itemGroupName"
               className="block text-sm font-medium text-gray-600"
             >
-              Product Category Name
+              Item Group Name
             </label>
             <Controller
-              name="productCategoryName"
+              name="itemGroupName"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="productCategoryName"
+                  id="itemGroupName"
                   type="text"
                   {...field}
-                  placeholder="Product category  name"
+                  placeholder="Name"
                   className="mt-1"
                 />
               )}
             />
           </div>
 
-          {/* Order Ticket Group */}
-          <div className="mb-4">
-            <label
-              htmlFor="orderTicketGroup"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Order Ticket Group
-            </label>
-            <Controller
-              name="orderTicketGroup"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Select id="selectOption" {...field} className="mt-1">
-                  <option value="Main Kitchen">Main Kitchen</option>
-                  <option value="No Order Ticket">No Order Ticket</option>
-                </Select>
-              )}
-            />
-          </div>
 
-          {/* Sort Order */}
+          {/* Select the products */}
           <div className="my-4">
             <label
               htmlFor="sortOrder"
               className="block text-sm font-medium text-gray-600"
             >
-              Sort Order
+              Select the products
             </label>
             <Controller
               name="sortOrder"

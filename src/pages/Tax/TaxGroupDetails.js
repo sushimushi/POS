@@ -14,14 +14,14 @@ function RegisterDetails() {
       >
         <div className="mt-4 ml-4">
           <h2 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-2">
-            Your Register Details
+            Setup Taxes and Tax Groups
           </h2>
           <span className="block text-sm text-gray-700 dark:text-gray-200 mb-4">
-            Enable receipt printing to print receipts while billing with this
-            register.
+            Create separate taxes for different tax rates and types.
           </span>
           <span className="block text-sm text-gray-700 dark:text-gray-200 mb-2">
-            By default, The shop name will be printed on the receipt.
+            One or more taxes can be grouped under a tax group and applied to
+            products.
           </span>
         </div>
 
@@ -29,131 +29,40 @@ function RegisterDetails() {
           onSubmit={handleSubmit(submitHandler)}
           className="px-4 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
         >
-          {/* Register Name */}
+          {/* Tax Group Name */}
           <div className="my-4">
             <label
-              htmlFor="registerName"
+              htmlFor="taxGroupName"
               className="block text-sm font-medium text-gray-600"
             >
-              Register Name
+              Tax Group Name
             </label>
             <Controller
-              name="registerName"
+              name="taxGroupName"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="registerName"
+                  id="taxGroupName"
                   type="text"
                   {...field}
-                  placeholder="Enter your Register Name"
+                  placeholder="Tax Group Name"
                   className="mt-1"
                 />
               )}
             />
           </div>
 
-          {/* Receipt Number Prefix */}
-          <div className="mb-4">
-            <label
-              htmlFor="receiptNumberPrefix"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Receipt Number Prefix
-            </label>
-            <Controller
-              name="receiptNumberPrefix"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Input
-                  id="receiptNumberPrefix"
-                  type="text"
-                  {...field}
-                  placeholder="Receipt Number Prefix"
-                  className="mt-1"
-                />
-              )}
-            />
-          </div>
 
-          {/* Bill Header */}
-          <div className="mb-4">
-            <label
-              htmlFor="billHeader"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Bill Header
-            </label>
-            <Controller
-              name="billHeader"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Textarea
-                  id="billHeader"
-                  {...field}
-                  placeholder="Bill Header Content (Optional)"
-                  className="mt-1"
-                />
-              )}
-            />
-          </div>
-
-          {/* Bill Footer */}
-          <div className="mb-4">
-            <label
-              htmlFor="billFooter"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Bill Footer Content
-            </label>
-            <Controller
-              name="billFooter"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Textarea
-                  id="billFooter"
-                  {...field}
-                  placeholder="Bill Footer Content (Optional)"
-                  className="mt-1"
-                />
-              )}
-            />
-          </div>
-
-          {/* Printer type */}
-          <div className="mb-4">
-            <label
-              htmlFor="printerType"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Printer Type
-            </label>
-            <Controller
-              name="printerType"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Select id="selectOption" {...field} className="mt-1">
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </Select>
-              )}
-            />
-          </div>
-
-          {/* Print receipts and order tickets */}
+          {/* Taxes inclusive in product price */}
           <div className="mb-4 flex items-center gap-2">
             <Controller
-              name="printReceiptsAndOrderTickets"
+              name="taxesInclusiveInProductPrice"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="printReceiptsAndOrderTickets"
+                  id="taxesInclusiveInProductPrice"
                   type="checkbox"
                   {...field}
                   placeholder="Stale time in minutes (Optional)"
@@ -162,22 +71,28 @@ function RegisterDetails() {
               )}
             />
             <label
-              htmlFor="printReceiptsAndOrderTickets"
+              htmlFor="taxesInclusiveInProductPrice"
               className="block text-sm font-medium text-gray-600"
             >
-              Print receipts and order tickets (for Web)
+              Taxes inclusive in product price
             </label>
           </div>
 
-          {/* Include shop logo in printed receipts */}
-          <div className="mb-4 flex items-center gap-2">
+          {/* Zero Tax */}
+          <label
+              htmlFor="taxGroupName"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Select one or more taxes to add to this tax group
+            </label> 
+          <div className="mb-4 mt-2 flex items-center gap-2">
             <Controller
-              name="includeShopLogoInPrintedReceipts"
+              name="zeroTax"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="includeShopLogoInPrintedReceipts"
+                  id="zeroTax"
                   type="checkbox"
                   {...field}
                   placeholder="Stale time in minutes (Optional)"
@@ -186,183 +101,20 @@ function RegisterDetails() {
               )}
             />
             <label
-              htmlFor="includeShopLogoInPrintedReceipts"
+              htmlFor="zeroTax"
               className="block text-sm font-medium text-gray-600"
             >
-              Include shop logo in printed receipts (for Web)
+              Zero Tax
             </label>
           </div>
 
-          {/* Table Number */}
-          <div className="mb-4">
-            <label
-              htmlFor="tableNumbers"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Table Numbers
-            </label>
-            <Controller
-              name="tableNumbers"
-              control={control}
-              defaultValue="1-10"
-              render={({ field }) => (
-                <Textarea
-                  id="tableNumbers"
-                  {...field}
-                  placeholder="1-10"
-                  className="mt-1"
-                />
-              )}
-            />
-          </div>
 
           <Button className="mb-4" type="submit">
             Save
           </Button>
         </form>
       </div>
-      <div
-        className="px-4 py-3 mb-8 lg:grid grid-cols-[200px,1fr]"
-        style={{ gridTemplateColumns: "max(380px) 1fr" }}
-      >
-        <div className="mt-4 ml-4">
-          <h2 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-2">
-            Your Waiter App / Kitchen Display System (KDS) Settings.
-          </h2>
-          <span className="block text-sm text-gray-700 dark:text-gray-200 mb-2">
-            To enable Waiter app / KDS, configure the IP address of the SlickPOS
-            Desktop. The Waiter app and KDS should be on the same network.
-          </span>
-        </div>
 
-        <form
-          onSubmit={handleSubmit(submitHandler)}
-          className="px-4 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
-        >
-          {/* Server IP Address For Waiter / KDS App */}
-          <div className="mb-4 mt-4">
-            <label
-              htmlFor="serverIp"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Server IP Address For Waiter / KDS App
-            </label>
-            <Controller
-              name="serverIp"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Input
-                  id="serverIp"
-                  type="text"
-                  {...field}
-                  placeholder="Server IP Address For Waiter / KDS App (Optional)"
-                  className="mt-1"
-                />
-              )}
-            />
-          </div>
-
-          {/* KDS Stale Time  */}
-          <div className="mb-4">
-            <label
-              htmlFor="kdsStaleTime"
-              className="block text-sm font-medium text-gray-600"
-            >
-              KDS Stale Time
-            </label>
-            <Controller
-              name="kdsStaleTime"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Input
-                  id="kdsStaleTime"
-                  type="text"
-                  {...field}
-                  placeholder="Stale time in minutes (Optional)"
-                  className="mt-1"
-                />
-              )}
-            />
-          </div>
-
-          {/* Enable accept status for orders in KDS */}
-          <div className="mb-4 flex items-center gap-2">
-            <Controller
-              name="acceptStatusForOrdersInKDS"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Input
-                  id="acceptStatusForOrdersInKDS"
-                  type="checkbox"
-                  {...field}
-                  placeholder="Stale time in minutes (Optional)"
-                  className=""
-                />
-              )}
-            />
-            <label
-              htmlFor="acceptStatusForOrdersInKDS"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Enable accept status for orders in KDS
-            </label>
-          </div>
-
-          {/* Enable served status for orders in KDS */}
-          <div className="mb-4 flex items-center gap-2">
-            <Controller
-              name="acceptServedForOrdersInKDS"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Input
-                  id="acceptServedForOrdersInKDS"
-                  type="checkbox"
-                  {...field}
-                  placeholder="Stale time in minutes (Optional)"
-                  className=""
-                />
-              )}
-            />
-            <label
-              htmlFor="acceptServedForOrdersInKDS"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Enable accept served for orders in KDS
-            </label>
-          </div>
-          {/* Allow to change status at item level in KDS */}
-          <div className="mb-4 flex items-center gap-2">
-            <Controller
-              name="allowToChangeStatusAtItemLevelInKDS"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Input
-                  id="allowToChangeStatusAtItemLevelInKDS"
-                  type="checkbox"
-                  {...field}
-                  placeholder="Stale time in minutes (Optional)"
-                  className=""
-                />
-              )}
-            />
-            <label
-              htmlFor="allowToChangeStatusAtItemLevelInKDS"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Allow to change status at item level in KDS
-            </label>
-          </div>
-
-          <Button className="mb-4" type="submit">
-            Save
-          </Button>
-        </form>
-      </div>
     </>
   );
 }

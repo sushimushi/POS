@@ -15,11 +15,15 @@ function ProductCategoriesDetails() {
       >
         <div className="mt-4 ml-4">
           <h2 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-2">
-            Your Product Category Details
+            Setup Variant
           </h2>
           <span className="block text-sm text-gray-700 dark:text-gray-200 mb-4">
-            Products will be grouped under these categories in the sales
-            register.
+            Create product variants for sizes, flavours etc.
+          </span>
+
+          <span className="block text-sm text-gray-700 dark:text-gray-200 mb-4">
+            For example, create variants Small, Medium & Large and group them under a variant group
+            called Size.
           </span>
         </div>
 
@@ -27,47 +31,74 @@ function ProductCategoriesDetails() {
           onSubmit={handleSubmit(submitHandler)}
           className="px-4 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
         >
-          {/* Product Category Name */}
+          {/* Variant Name */}
           <div className="my-4">
             <label
-              htmlFor="productCategoryName"
+              htmlFor="variantName"
               className="block text-sm font-medium text-gray-600"
             >
-              Product Category Name
+              Variant Name
             </label>
             <Controller
-              name="productCategoryName"
+              name="variantName"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="productCategoryName"
+                  id="variantName"
                   type="text"
                   {...field}
-                  placeholder="Product category  name"
+                  placeholder="Variant Name"
                   className="mt-1"
                 />
               )}
             />
           </div>
 
-          {/* Order Ticket Group */}
-          <div className="mb-4">
+          {/* Variant Comment */}
+          <div className="my-4">
             <label
-              htmlFor="orderTicketGroup"
+              htmlFor="variantComment"
               className="block text-sm font-medium text-gray-600"
             >
-              Order Ticket Group
+              Variant Name
             </label>
             <Controller
-              name="orderTicketGroup"
+              name="variantComment"
               control={control}
               defaultValue=""
               render={({ field }) => (
-                <Select id="selectOption" {...field} className="mt-1">
-                  <option value="Main Kitchen">Main Kitchen</option>
-                  <option value="No Order Ticket">No Order Ticket</option>
-                </Select>
+                <Input
+                  id="variantComment"
+                  type="text"
+                  {...field}
+                  placeholder="Comment (optional)"
+                  className="mt-1"
+                />
+              )}
+            />
+          </div>
+
+          {/* Price */}
+          <div className="my-4">
+            <label
+              htmlFor="price"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Price
+            </label>
+            <Controller
+              name="price"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <Input
+                  id="price"
+                  type="text"
+                  {...field}
+                  placeholder="Price"
+                  className="mt-1"
+                />
               )}
             />
           </div>
