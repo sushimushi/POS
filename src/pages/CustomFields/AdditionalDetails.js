@@ -15,11 +15,11 @@ function AdditionalDetails() {
       >
         <div className="mt-4 ml-4">
           <h2 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-2">
-            Your Product Category Details
+            Setup Custom Fields
           </h2>
           <span className="block text-sm text-gray-700 dark:text-gray-200 mb-4">
-            Products will be grouped under these categories in the sales
-            register.
+            You can setup custom fields like Payment Types, Petty Cash
+            Categories, Receipt Additional Details and Tags.
           </span>
         </div>
 
@@ -27,73 +27,74 @@ function AdditionalDetails() {
           onSubmit={handleSubmit(submitHandler)}
           className="px-4 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
         >
-          {/* Product Category Name */}
+          {/* Additional Detail Name */}
           <div className="my-4">
             <label
-              htmlFor="productCategoryName"
+              htmlFor="additionalDetailName"
               className="block text-sm font-medium text-gray-600"
             >
-              Product Category Name
+              Additional Detail Name
             </label>
             <Controller
-              name="productCategoryName"
+              name="additionalDetailName"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="productCategoryName"
+                  id="additionalDetailName"
                   type="text"
                   {...field}
-                  placeholder="Product category  name"
+                  placeholder="Additional Detail Name"
                   className="mt-1"
                 />
               )}
             />
           </div>
 
-          {/* Order Ticket Group */}
+          {/* Additional Detail Type */}
           <div className="mb-4">
             <label
-              htmlFor="orderTicketGroup"
+              htmlFor="additionalDetailType"
               className="block text-sm font-medium text-gray-600"
             >
-              Order Ticket Group
+              Additional Detail Type
             </label>
             <Controller
-              name="orderTicketGroup"
+              name="additionalDetailType"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Select id="selectOption" {...field} className="mt-1">
-                  <option value="Main Kitchen">Main Kitchen</option>
-                  <option value="No Order Ticket">No Order Ticket</option>
+                  <option value="option1">Select Field Type</option>
+                  <option value="option2">Customer Data</option>
+                  <option value="option3">Sale Data</option>
                 </Select>
               )}
             />
           </div>
 
-          {/* Sort Order */}
-          <div className="my-4">
-            <label
-              htmlFor="sortOrder"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Sort Order
-            </label>
+          {/* Print this field on receipts */}
+          <div className="mb-4 flex items-center gap-2">
             <Controller
-              name="sortOrder"
+              name="printThisFieldOnReceipts"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="sortOrder"
-                  type="text"
+                  id="printThisFieldOnReceipts"
+                  type="checkbox"
                   {...field}
-                  placeholder="Sort Order (Optional)"
-                  className="mt-1"
+                  placeholder="Stale time in minutes (Optional)"
+                  className=""
                 />
               )}
             />
+            <label
+              htmlFor="printThisFieldOnReceipts"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Print this field on receipts
+            </label>
           </div>
 
           <Button className="mb-4" type="submit">

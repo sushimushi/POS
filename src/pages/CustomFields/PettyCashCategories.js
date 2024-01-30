@@ -15,11 +15,11 @@ function PettyCashCategories() {
       >
         <div className="mt-4 ml-4">
           <h2 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-2">
-            Your Product Category Details
+            Setup Custom Fields
           </h2>
           <span className="block text-sm text-gray-700 dark:text-gray-200 mb-4">
-            Products will be grouped under these categories in the sales
-            register.
+            You can setup custom fields like Payment Types, Petty Cash
+            Categories, Receipt Additional Details and Tags.
           </span>
         </div>
 
@@ -27,69 +27,48 @@ function PettyCashCategories() {
           onSubmit={handleSubmit(submitHandler)}
           className="px-4 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
         >
-          {/* Product Category Name */}
+          {/* Petty Cash Category Name */}
           <div className="my-4">
             <label
-              htmlFor="productCategoryName"
+              htmlFor="pettyCashCategoryName"
               className="block text-sm font-medium text-gray-600"
             >
-              Product Category Name
+              Petty Cash Category Name
             </label>
             <Controller
-              name="productCategoryName"
+              name="pettyCashCategoryName"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="productCategoryName"
+                  id="pettyCashCategoryName"
                   type="text"
                   {...field}
-                  placeholder="Product category  name"
+                  placeholder="Petty Cash Category Name"
                   className="mt-1"
                 />
               )}
             />
           </div>
 
-          {/* Order Ticket Group */}
-          <div className="mb-4">
-            <label
-              htmlFor="orderTicketGroup"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Order Ticket Group
-            </label>
-            <Controller
-              name="orderTicketGroup"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Select id="selectOption" {...field} className="mt-1">
-                  <option value="Main Kitchen">Main Kitchen</option>
-                  <option value="No Order Ticket">No Order Ticket</option>
-                </Select>
-              )}
-            />
-          </div>
-
-          {/* Sort Order */}
+          {/* Description */}
           <div className="my-4">
             <label
-              htmlFor="sortOrder"
+              htmlFor="description"
               className="block text-sm font-medium text-gray-600"
             >
-              Sort Order
+              Description
             </label>
             <Controller
-              name="sortOrder"
+              name="description"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="sortOrder"
+                  id="description"
                   type="text"
                   {...field}
-                  placeholder="Sort Order (Optional)"
+                  placeholder="Description (Optional)"
                   className="mt-1"
                 />
               )}

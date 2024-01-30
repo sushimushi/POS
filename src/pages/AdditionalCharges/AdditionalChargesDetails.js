@@ -15,11 +15,16 @@ function AdditionalChargesDetails() {
       >
         <div className="mt-4 ml-4">
           <h2 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-2">
-            Your Product Category Details
+            Additional Charge Details
           </h2>
           <span className="block text-sm text-gray-700 dark:text-gray-200 mb-4">
-            Products will be grouped under these categories in the sales
-            register.
+            Delivery charges, parcel charges, service charges etc. can be setup
+            as additional charges.
+          </span>
+
+          <span className="block text-sm text-gray-700 dark:text-gray-200 mb-4">
+            Additional charges are applied on top of the discounted subtotal.
+            Also, additional charges can have taxes.
           </span>
         </div>
 
@@ -27,73 +32,145 @@ function AdditionalChargesDetails() {
           onSubmit={handleSubmit(submitHandler)}
           className="px-4 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
         >
-          {/* Product Category Name */}
+          {/* Additional Charge Name */}
           <div className="my-4">
             <label
-              htmlFor="productCategoryName"
+              htmlFor="additionalChargeName"
               className="block text-sm font-medium text-gray-600"
             >
-              Product Category Name
+              Additional Charge Name
             </label>
             <Controller
-              name="productCategoryName"
+              name="additionalChargeName"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="productCategoryName"
+                  id="additionalChargeName"
                   type="text"
                   {...field}
-                  placeholder="Product category  name"
+                  placeholder="Additional Charge Name"
                   className="mt-1"
                 />
               )}
             />
           </div>
 
-          {/* Order Ticket Group */}
+          {/* Additional Charge Type */}
           <div className="mb-4">
             <label
-              htmlFor="orderTicketGroup"
+              htmlFor="additionalChargeType"
               className="block text-sm font-medium text-gray-600"
             >
-              Order Ticket Group
+              Additional Charge Type
             </label>
             <Controller
-              name="orderTicketGroup"
+              name="additionalChargeType"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Select id="selectOption" {...field} className="mt-1">
-                  <option value="Main Kitchen">Main Kitchen</option>
-                  <option value="No Order Ticket">No Order Ticket</option>
+                  <option value="option 1">
+                    Select Additional Charge Type
+                  </option>
+                  <option value="option 2">Cash</option>
+                  <option value="option 3">Percentage</option>
                 </Select>
               )}
             />
           </div>
 
-          {/* Sort Order */}
+          {/* Additional Charge Value */}
           <div className="my-4">
             <label
-              htmlFor="sortOrder"
+              htmlFor="additionalChargeValue"
               className="block text-sm font-medium text-gray-600"
             >
-              Sort Order
+              Additional Charge Value
             </label>
             <Controller
-              name="sortOrder"
+              name="additionalChargeValue"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="sortOrder"
+                  id="additionalChargeValue"
                   type="text"
                   {...field}
-                  placeholder="Sort Order (Optional)"
+                  placeholder="Additional Charge Value"
                   className="mt-1"
                 />
               )}
             />
+          </div>
+
+          {/* Tax Group */}
+          <div className="mb-4">
+            <label
+              htmlFor="taxGroup"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Tax Group
+            </label>
+            <Controller
+              name="taxGroup"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <Select id="selectOption" {...field} className="mt-1">
+                  <option value="option 1">Select a Tax Group</option>
+                  <option value="option 2">Zero Tax Group</option>
+                </Select>
+              )}
+            />
+          </div>
+
+          {/* Order Type */}
+          <div className="mb-4">
+            <label
+              htmlFor="orderType"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Order Type
+            </label>
+            <Controller
+              name="orderType"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <Select id="selectOption" {...field} className="mt-1">
+                  <option value="option 1">Select a Type</option>
+                  <option value="option 2">All Orders</option>
+                  <option value="option 3">Take Away</option>
+                  <option value="option 4">Delivery</option>
+                  <option value="option 5">Dine In</option>
+                </Select>
+              )}
+            />
+          </div>
+
+          {/* Is automatically added */}
+          <div className="mb-4 flex items-center gap-2">
+            <Controller
+              name="isAutomaticallyAdded"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <Input
+                  id="isAutomaticallyAdded"
+                  type="checkbox"
+                  {...field}
+                  placeholder="Stale time in minutes (Optional)"
+                  className=""
+                />
+              )}
+            />
+            <label
+              htmlFor="isAutomaticallyAdded"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Is Automatically Added?
+            </label>
           </div>
 
           <Button className="mb-4" type="submit">
