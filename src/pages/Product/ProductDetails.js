@@ -15,10 +15,10 @@ function ProductCategoriesDetails() {
       >
         <div className="mt-4 ml-4">
           <h2 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-2">
-          Your Product Details
+            Your Product Details
           </h2>
           <span className="block text-sm text-gray-700 dark:text-gray-200 mb-4">
-          Edit your product details here. Product name should be unique.
+            Edit your product details here. Product name should be unique.
           </span>
         </div>
 
@@ -70,8 +70,8 @@ function ProductCategoriesDetails() {
             />
           </div>
 
-            {/* Tax Group */}
-            <div className="mb-4">
+          {/* Tax Group */}
+          <div className="mb-4">
             <label
               htmlFor="taxGroup"
               className="block text-sm font-medium text-gray-600"
@@ -114,10 +114,6 @@ function ProductCategoriesDetails() {
             />
           </div>
 
-          <Button className="mb-4 mr-2" type="button">
-            Go Back
-          </Button>
-
           <Button className="mb-4" type="submit">
             Save
           </Button>
@@ -130,10 +126,11 @@ function ProductCategoriesDetails() {
       >
         <div className="mt-4 ml-4">
           <h2 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-2">
-          Product Options
+            Product Options
           </h2>
           <span className="block text-sm text-gray-700 dark:text-gray-200 mb-4">
-          You can add one ore more variant groups and an add-on group to the product.
+            You can add one ore more variant groups and an add-on group to the
+            product.
           </span>
         </div>
 
@@ -165,10 +162,6 @@ function ProductCategoriesDetails() {
             />
           </div>
 
-          <Button className="mb-4 mr-2" type="button">
-            Go Back
-          </Button>
-
           <Button className="mb-4" type="submit">
             Save
           </Button>
@@ -181,10 +174,10 @@ function ProductCategoriesDetails() {
       >
         <div className="mt-4 ml-4">
           <h2 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-2">
-          Product Additional Details
+            Product Additional Details
           </h2>
           <span className="block text-sm text-gray-700 dark:text-gray-200 mb-4">
-          Additional details about the product.
+            Additional details about the product.
           </span>
         </div>
 
@@ -264,8 +257,8 @@ function ProductCategoriesDetails() {
             />
           </div>
 
-            {/* Limit to Register */}
-            <div className="mb-4">
+          {/* Limit to Register */}
+          <div className="mb-4">
             <label
               htmlFor="limitToRegister"
               className="block text-sm font-medium text-gray-600"
@@ -307,10 +300,6 @@ function ProductCategoriesDetails() {
               )}
             />
           </div>
-
-          <Button className="mb-4 mr-2" type="button">
-            Go Back
-          </Button>
 
           <Button className="mb-4" type="submit">
             Save
