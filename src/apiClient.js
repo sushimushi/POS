@@ -3,7 +3,7 @@ import axios from "axios";
 const baseURL =
   process.env.NODE_ENV === "production"
     ? "https://your-production-url.com"
-    : "http://localhost:3000";
+    : "http://localhost:3005";
 
 console.log(baseURL);
 const axiosClient = axios.create({

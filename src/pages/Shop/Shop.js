@@ -38,7 +38,7 @@ function Shop() {
   const fileInputRef = useRef(null);
 
   const { isLoading, data } = useQuery("account", () => {
-    return axiosClient.get("/accounts", { params: params });
+    return axiosClient.get("/accounts/"+'', { params: params });
   });
 
   if (isLoading) {
