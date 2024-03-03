@@ -3,11 +3,49 @@ import { useForm, Controller } from "react-hook-form";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { CameraLinedIcon } from "../../icons";
 import { Input, Button } from "@windmill/react-ui";
+import { useQuery } from "react-query";
+import axiosClient from "../../apiClient";
+
+const params = {
+  filter: JSON.stringify({
+    offset: 0,
+    limit: 100,
+    skip: 0,
+    where: {
+      additionalProp1: {},
+    },
+    fields: {
+      accountId: true,
+      email: true,
+      mobileNumber: true,
+      businessType: true,
+      userName: true,
+      businessName: true,
+      inceptionDate: true,
+      isPaid: true,
+      option: true,
+      businessAddressId: true,
+      userId: true,
+      registerId: true,
+    },
+    include: [],
+  }),
+};
+
 function Shop() {
   const { register, control, handleSubmit, watch, formState } = useForm();
   const [previewUrl, setPreviewUrl] = useState(null);
   const fileInputRef = useRef(null);
 
+  const { isLoading, data } = useQuery("account", () => {
+    return axiosClient.get("/accounts", { params: params });
+  });
+
+  if (isLoading) {
+    return <>Loading... </>;
+  }
+
+  console.log(data);
   // handle file change for logo upload
   const handleFileChange = (e) => {
     const file = e.target.files[0];
