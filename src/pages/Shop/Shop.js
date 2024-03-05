@@ -1,51 +1,45 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { CameraLinedIcon } from "../../icons";
 import { Input, Button } from "@windmill/react-ui";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import axiosClient from "../../apiClient";
 
-const params = {
-  filter: JSON.stringify({
-    offset: 0,
-    limit: 100,
-    skip: 0,
-    where: {
-      additionalProp1: {},
-    },
-    fields: {
-      accountId: true,
-      email: true,
-      mobileNumber: true,
-      businessType: true,
-      userName: true,
-      businessName: true,
-      inceptionDate: true,
-      isPaid: true,
-      option: true,
-      businessAddressId: true,
-      userId: true,
-      registerId: true,
-    },
-    include: [],
-  }),
-};
-
 function Shop() {
-  const { register, control, handleSubmit, watch, formState } = useForm();
+  const { register, control, handleSubmit, watch, formState, setValue } =
+    useForm();
   const [previewUrl, setPreviewUrl] = useState(null);
   const fileInputRef = useRef(null);
 
-  const { isLoading, data } = useQuery("account", () => {
-    return axiosClient.get("/accounts/"+'', { params: params });
+  const accountId = localStorage.getItem("accountId");
+
+  const { isLoading, data } = useQuery("account", async () => {
+    try {
+      const response = await axiosClient.get("/accounts/" + accountId);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
   });
 
-  if (isLoading) {
-    return <>Loading... </>;
-  }
+  useEffect(() => {
+    if (data) {
+      const { businessName, city, pin, websiteLink, facebookLink, instagramLink, userName, email, mobileNumber } = data.data;
+      setValue("businessName", businessName);
+      setValue("city", city);
+      setValue("pin", pin);
+      setValue("option.websiteLink", websiteLink);
+      setValue("option.facebookLink", facebookLink);
+      setValue("option.instagramLink", instagramLink);
+      setValue("userName", userName);
+      setValue("email", email);
+      if (mobileNumber !== 0) {
+        setValue("mobileNumber", mobileNumber);
+      }
+    }
+  }, [data, setValue]);
 
-  console.log(data);
   // handle file change for logo upload
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -67,7 +61,28 @@ function Shop() {
     fileInputRef.current.click();
   };
 
-  const submitHandler = (data) => console.log(data);
+  // const submitHandler = (data) => console.log(data);
+
+  const { mutate } = useMutation((formData) => {
+    return axiosClient.put("/accounts/" + accountId, formData); // Adjust the endpoint as per your API
+  });
+
+  const submitHandler = async (formData) => {
+    try {
+      console.log(formData);
+      console.log(data.data);
+      formData = { ...data.data, ...formData };
+      console.log(formData);
+      await mutate(formData);
+      console.log("Form data submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting form data:", error);
+    }
+  };
+
+  if (isLoading) {
+    return <>Loading... </>;
+  }
   return (
     <>
       <div
@@ -140,18 +155,18 @@ function Shop() {
           {/* Shop Name */}
           <div className="mb-4">
             <label
-              htmlFor="shopName"
+              htmlFor="businessName"
               className="block text-sm font-medium text-gray-600"
             >
               Shop Name
             </label>
             <Controller
-              name="shopName"
+              name="businessName"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="shopName"
+                  id="businessName"
                   type="text"
                   {...field}
                   placeholder="Enter your shopname"
@@ -220,18 +235,18 @@ function Shop() {
           {/* Website Link */}
           <div className="mb-4">
             <label
-              htmlFor="websiteLink"
+              htmlFor="option.websiteLink"
               className="block text-sm font-medium text-gray-600"
             >
               Website Link
             </label>
             <Controller
-              name="websiteLink"
+              name="option.websiteLink"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="websiteLink"
+                  id="option.websiteLink"
                   type="text"
                   {...field}
                   placeholder="https://<your domin> (Optional)"
@@ -244,18 +259,18 @@ function Shop() {
           {/* Facebook Link */}
           <div className="mb-4">
             <label
-              htmlFor="facebookLink"
+              htmlFor="option.facebookLink"
               className="block text-sm font-medium text-gray-600"
             >
               Facebook Link
             </label>
             <Controller
-              name="facebookLink"
+              name="option.facebookLink"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="facebookLink"
+                  id="option.facebookLink"
                   type="text"
                   {...field}
                   placeholder="https:/www.facebook.com/<your profile> (Optional)"
@@ -268,18 +283,18 @@ function Shop() {
           {/* Instagram Link */}
           <div className="mb-4">
             <label
-              htmlFor="instagramLink"
+              htmlFor="option.instagramLink"
               className="block text-sm font-medium text-gray-600"
             >
               Instagram Link
             </label>
             <Controller
-              name="instagramLink"
+              name="option.instagramLink"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="instagramLink"
+                  id="option.instagramLink"
                   type="text"
                   {...field}
                   placeholder="https:/www.instagram.com/<your profile> (Optional)"
@@ -314,18 +329,18 @@ function Shop() {
           {/* Your Name */}
           <div className="mb-4 mt-4">
             <label
-              htmlFor="yourName"
+              htmlFor="userName"
               className="block text-sm font-medium text-gray-600"
             >
               Your Name
             </label>
             <Controller
-              name="yourName"
+              name="userName"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="yourName"
+                  id="userName"
                   type="text"
                   {...field}
                   placeholder="Enter your Name"
@@ -361,19 +376,19 @@ function Shop() {
           {/* Mobile Phone Number */}
           <div className="mb-4">
             <label
-              htmlFor="mobilePhoneNumber"
+              htmlFor="mobileNumber"
               className="block text-sm font-medium text-gray-600"
             >
               Mobile Phone Number
             </label>
             <Controller
-              name="mobilePhoneNumber"
+              name="mobileNumber"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <Input
-                  id="mobilePhoneNumber"
-                  type="text"
+                  id="mobileNumber"
+                  type="number"
                   {...field}
                   placeholder="Enter your Mobile phone number"
                   className="mt-1"

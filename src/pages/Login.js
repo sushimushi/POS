@@ -13,7 +13,6 @@ function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
   const history = useHistory();
 
   const onSubmit = async (data) => {
@@ -23,12 +22,12 @@ function Login() {
 
       const response = await axiosClient.post("/signin", data);
 
-      console.log(response);
       if (response.status === 200) {
         const authToken = response.data.token;
-        const account = response.data.account;
+        const accountId = response.data.account[0].accountId;
         localStorage.setItem("authToken", authToken);
-        localStorage.setItem("account", account);
+        localStorage.setItem("accountId", accountId);
+
         history.replace("/app/dashboard");
       }
     } catch (error) {
