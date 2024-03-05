@@ -17,14 +17,14 @@ function Login() {
 
   const onSubmit = async (data) => {
     try {
-      const authToken = localStorage.getItem("authToken");
-      if (authToken) return history.replace("/app/dashboard");
 
       const response = await axiosClient.post("/signin", data);
-
+      
       if (response.status === 200) {
+        localStorage.clear();
         const authToken = response.data.token;
         const accountId = response.data.account[0].accountId;
+
         localStorage.setItem("authToken", authToken);
         localStorage.setItem("accountId", accountId);
 

@@ -14,29 +14,22 @@ function Shop() {
 
   const accountId = localStorage.getItem("accountId");
 
-  const { isLoading, data } = useQuery("account", async () => {
-    try {
-      const response = await axiosClient.get("/accounts/" + accountId);
-      return response.data;
-    } catch (error) {
-      console.error(error);
-    }
+  const { isLoading, data } = useQuery("account", () => {
+    return axiosClient.get("/accounts/" + accountId);
   });
 
   useEffect(() => {
     if (data) {
-      const { businessName, city, pin, websiteLink, facebookLink, instagramLink, userName, email, mobileNumber } = data.data;
-      setValue("businessName", businessName);
-      setValue("city", city);
-      setValue("pin", pin);
-      setValue("option.websiteLink", websiteLink);
-      setValue("option.facebookLink", facebookLink);
-      setValue("option.instagramLink", instagramLink);
-      setValue("userName", userName);
-      setValue("email", email);
-      if (mobileNumber !== 0) {
-        setValue("mobileNumber", mobileNumber);
-      }
+      setValue("businessName", data.data.businessName);
+      setValue("city", data.data.city); // Set your city value if available in data
+      setValue("pin", data.data.pin); // Set your pin value if available in data
+      setValue("option.websiteLink", data.data.websiteLink); // Set your website link value if available in data
+      setValue("option.facebookLink", data.data.facebookLink); // Set your facebook link value if available in data
+      setValue("option.instagramLink", data.data.instagramLink); // Set your instagram link value if available in data
+      setValue("userName", data.data.userName); // Set your name value if available in data
+      setValue("email", data.data.email); // Set your email value if available in data
+      data.data.mobileNumber !== 0 &&
+        setValue("mobileNumber", data.data.mobileNumber); // Set your mobileNumber value if available in data
     }
   }, [data, setValue]);
 
