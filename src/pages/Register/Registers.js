@@ -14,19 +14,23 @@ import {
 } from "@windmill/react-ui";
 import Tabs from "../../components/Tabs";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { useMutation, useQuery } from "react-query";
+import axiosClient from "../../apiClient";
 
 import response from "../../utils/demo/tableData";
 
 function Registers() {
+  const resultsPerPage = 10;
+  let totalResults = 0;
+
+  const { isLoading, data } = useQuery("registerList", () => {
+    return axiosClient.get("/registers/");
+  });
   // setup pages control for every table
   const [pageTable1, setPageTable1] = useState(1);
 
   // setup data for every table
   const [dataTable1, setDataTable1] = useState([]);
-
-  // pagination setup
-  const resultsPerPage = 10;
-  const totalResults = response.length;
 
   // tab names for receipt page
   const tabs = ["All Registers"];
@@ -49,6 +53,17 @@ function Registers() {
     );
   }, [pageTable1]);
 
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+      totalResults = data.length;
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return <>Loading... </>;
+  }
+
   return (
     <>
       <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -67,14 +82,14 @@ function Registers() {
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable1.map((user, i) => (
+                {data.data.map((register, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
                         <Input
                           type="checkbox"
-                          name={user.name}
-                          id={user.name}
+                          name={register.selected}
+                          id={register.registerId}
                           className="mr-2"
                         />
                         <div>
@@ -82,16 +97,23 @@ function Registers() {
                             to={"/app/settings/registers/" + i}
                             className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                           >
-                            {user.name}
+                            {register.name}
                           </Link>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">$ {user.amount}</span>
+                      <span className="text-sm">
+                        {register.receiptNumberPrefix}
+                      </span>
                     </TableCell>
                     <TableCell>
-                      <Badge type={user.status}>{user.status}</Badge>
+                      <span className="text-sm">
+                        {register.isPrintReceipt
+                        &&
+                        <Badge>true</Badge>}
+                      </span>
+                      {/* <Badge type={register.status}>{register.status}</Badge> */}
                     </TableCell>
                   </TableRow>
                 ))}
