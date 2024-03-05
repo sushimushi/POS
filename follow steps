@@ -1,0 +1,30 @@
+  step0: 'iwdas'
+//   import axios and useQuery 
+  import { useMutation, useQuery } from "react-query";
+  import axiosClient from "../../apiClient";
+
+  step1:
+
+  const resultsPerPage = 10;
+  let totalResults = 0;
+
+  const { isLoading, data } = useQuery("categoryList", () => {
+    return axiosClient.get("/categories/");
+  });
+  // const { isLoading, data } = useQuery("", () => {
+  //   return axiosClient.get("/categories/");
+  // });
+
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+      totalResults = data.length;
+    }
+  }, [data]);
+
+  step2:"  just before return "
+  if (isLoading) {
+    return <>Loading... </>;
+  }
+
+  step3: "replace "

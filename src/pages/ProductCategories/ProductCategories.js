@@ -19,32 +19,33 @@ import {
 import Tabs from "../../components/Tabs";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
-import response from "../../utils/demo/tableData";
-// make a copy of the data, for the second table
-const response2 = response.concat([]);
+import { useQuery } from "react-query";
+import axiosClient from "../../apiClient";
 
 function ProductCategories() {
-  /**
-   * DISCLAIMER: This code could be badly improved, but for the sake of the example
-   * and readability, all the logic for both table are here.
-   * You would be better served by dividing each table in its own
-   * component, like Table(?) and TableWithActions(?) hiding the
-   * presentation details away from the page view.
-   */
+  const resultsPerPage = 10;
+  let totalResults = 0;
+
+  const { isLoading, data } = useQuery("categoryList", () => {
+    return axiosClient.get("/categories/");
+  });
+  // const { isLoading, data } = useQuery("", () => {
+  //   return axiosClient.get("/categories/");
+  // });
+
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+      totalResults = data.length;
+    }
+  }, [data]);
 
   // setup pages control for every table
   const [pageTable1, setPageTable1] = useState(1);
 
-  // setup data for every table
-  const [dataTable1, setDataTable1] = useState([]);
-
-  // pagination setup
-  const resultsPerPage = 10;
-  const totalResults = response.length;
-
   // tab names for receipt page
   const tabs = ["All Product Categories", "All Order Ticket Groups"];
-  // page Tabs setup
+
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
   // pagination change control
@@ -52,17 +53,9 @@ function ProductCategories() {
     setPageTable1(p);
   }
 
-  // on page change, load new sliced data
-  // here you would make another server request for new data
-  useEffect(() => {
-    setDataTable1(
-      response.slice(
-        (pageTable1 - 1) * resultsPerPage,
-        pageTable1 * resultsPerPage
-      )
-    );
-  }, [pageTable1]);
-
+  if (isLoading) {
+    return <>Loading... </>;
+  }
   return (
     <>
       <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -80,14 +73,14 @@ function ProductCategories() {
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable1.map((user, i) => (
+                {data.data.map((category, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
                         <Input
                           type="checkbox"
-                          name={user.name}
-                          id={user.name}
+                          name={category.selected}
+                          id={category.id}
                           className="mr-2"
                         />
                         <div>
@@ -95,13 +88,15 @@ function ProductCategories() {
                             to={"/app/settings/product-categories/" + i}
                             className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                           >
-                            {user.name}
+                            {category.name}
                           </Link>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">$ {user.amount}</span>
+                      <span className="text-sm">
+                        $ {category.orderTicketGroupId}
+                      </span>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -117,7 +112,8 @@ function ProductCategories() {
             </TableFooter>
           </TableContainer>
         )}
-        {activeTab === "All Order Ticket Groups" && (
+
+        {/* {activeTab === "All Order Ticket Groups" && (
           <TableContainer className="mb-8">
             <Table>
               <TableHeader>
@@ -162,7 +158,7 @@ function ProductCategories() {
               />
             </TableFooter>
           </TableContainer>
-        )}
+        )} */}
       </div>
     </>
   );
