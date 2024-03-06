@@ -1,10 +1,19 @@
 import React, { useState, useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { CameraLinedIcon } from "../../icons";
+import { useParams } from "react-router-dom";
 import { Input, Button, Textarea, Select } from "@windmill/react-ui";
+import { useQuery } from "react-query";
+import axiosClient from "../../apiClient";
 
 function RegisterDetails() {
-  const { register, control, handleSubmit, watch, formState } = useForm();
+  const { register, control, handleSubmit, setValue } = useForm();
+
+  const { id } = useParams();
+  const { isLoading, data } = useQuery("registerData", () => {
+    return axiosClient.get("/registers/" + id);
+  });
+  console.log(data);
 
   const submitHandler = (data) => console.log(data);
   return (

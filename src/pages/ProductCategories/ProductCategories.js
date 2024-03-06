@@ -80,12 +80,12 @@ function ProductCategories() {
                         <Input
                           type="checkbox"
                           name={category.selected}
-                          id={category.id}
+                          id={category.categoryId}
                           className="mr-2"
                         />
                         <div>
                           <Link
-                            to={"/app/settings/product-categories/" + i}
+                            to={"/app/settings/product-categories/" + category.categoryId}
                             className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                           >
                             {category.name}

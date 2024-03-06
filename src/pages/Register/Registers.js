@@ -26,32 +26,17 @@ function Registers() {
   const { isLoading, data } = useQuery("registerList", () => {
     return axiosClient.get("/registers/");
   });
-  // setup pages control for every table
-  const [pageTable1, setPageTable1] = useState(1);
-
-  // setup data for every table
-  const [dataTable1, setDataTable1] = useState([]);
 
   // tab names for receipt page
   const tabs = ["All Registers"];
+
   // page Tabs setup
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
   // pagination change control
   function onPageChangeTable1(p) {
-    setPageTable1(p);
+    // setPageTable1(p);
   }
-
-  // on page change, load new sliced data
-  // here you would make another server request for new data
-  useEffect(() => {
-    setDataTable1(
-      response.slice(
-        (pageTable1 - 1) * resultsPerPage,
-        pageTable1 * resultsPerPage
-      )
-    );
-  }, [pageTable1]);
 
   useEffect(() => {
     if (data) {
@@ -94,7 +79,9 @@ function Registers() {
                         />
                         <div>
                           <Link
-                            to={"/app/settings/registers/" + i}
+                            to={
+                              "/app/settings/registers/" + register.registerId
+                            }
                             className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                           >
                             {register.name}
@@ -109,9 +96,7 @@ function Registers() {
                     </TableCell>
                     <TableCell>
                       <span className="text-sm">
-                        {register.isPrintReceipt
-                        &&
-                        <Badge>true</Badge>}
+                        {register.isPrintReceipt && <Badge>true</Badge>}
                       </span>
                       {/* <Badge type={register.status}>{register.status}</Badge> */}
                     </TableCell>

@@ -19,6 +19,7 @@ import {
   DropdownItem,
   WindmillContext,
 } from "@windmill/react-ui";
+import { useHistory } from "react-router-dom";
 
 function Header({ pageHeader }) {
   const { mode, toggleMode } = useContext(WindmillContext);
@@ -27,12 +28,19 @@ function Header({ pageHeader }) {
   const [isNotificationsMenuOpen, setIsNotificationsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
+  const history = useHistory();
+
   function handleNotificationsClick() {
     setIsNotificationsMenuOpen(!isNotificationsMenuOpen);
   }
 
   function handleProfileClick() {
     setIsProfileMenuOpen(!isProfileMenuOpen);
+  }
+
+  function logout() {
+    localStorage.removeItem("authToken");
+    history.replace("/login");
   }
 
   return (
@@ -73,6 +81,9 @@ function Header({ pageHeader }) {
               ) : (
                 <MoonIcon className="w-5 h-5" aria-hidden="true" />
               )}
+            </button>
+            <button onClick={logout} className="text-sm font-semibold ml-2">
+              Logout
             </button>
           </li>
           {/* <!-- Notifications menu --> */}

@@ -26,6 +26,21 @@ axiosClient.interceptors.request.use(
   }
 );
 
+axiosClient.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    let res = error.response;
+    if (res && res.status === 401) {
+      // Redirect to login page if user is not authenticated
+      window.location.href = "/login";
+    }
+    console.error("Looks like there was a problem. Status Code: " + res.status);
+    return Promise.reject(error);
+  }
+);
+
 // axiosClient.interceptors.response.use(
 //   function (response) {
 //     return response;
