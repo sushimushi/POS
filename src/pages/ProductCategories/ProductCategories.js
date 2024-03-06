@@ -23,40 +23,38 @@ import { useQuery } from "react-query";
 import axiosClient from "../../apiClient";
 
 function ProductCategories() {
+  const tabs = ["All Product Categories", "All Order Ticket Groups"];
+  const [tableData, setTableData] = useState(1);
+  const [activeTab, setActiveTab] = useState(tabs[0]);
   const resultsPerPage = 10;
   let totalResults = 0;
+  const tabMapObj = {
+    "All Product Categories": "categories",
+    "All Order Ticket Groups": "orderTicketGroups",
+  };
 
-  const { isLoading, data } = useQuery("categoryList", () => {
-    return axiosClient.get("/categories/");
+  const { isLoading, data } = useQuery(tabMapObj[activeTab], () => {
+    return axiosClient.get(
+      tabMapObj[activeTab]
+        .replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2")
+        .toLowerCase()
+    );
   });
-  // const { isLoading, data } = useQuery("", () => {
-  //   return axiosClient.get("/categories/");
-  // });
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       totalResults = data.length;
     }
   }, [data]);
 
-  // setup pages control for every table
-  const [pageTable1, setPageTable1] = useState(1);
-
-  // tab names for receipt page
-  const tabs = ["All Product Categories", "All Order Ticket Groups"];
-
-  const [activeTab, setActiveTab] = useState(tabs[0]);
-
   // pagination change control
   function onPageChangeTable1(p) {
-    setPageTable1(p);
+    setTableData(p);
   }
 
-  if (isLoading) {
-    return <>Loading... </>;
-  }
-  return (
+  return isLoading ? (
+    <p>Loading...</p>
+  ) : (
     <>
       <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="py-4">
@@ -85,7 +83,10 @@ function ProductCategories() {
                         />
                         <div>
                           <Link
-                            to={"/app/settings/product-categories/" + category.categoryId}
+                            to={
+                              "/app/settings/product-categories/" +
+                              category.categoryId
+                            }
                             className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                           >
                             {category.name}
@@ -113,7 +114,7 @@ function ProductCategories() {
           </TableContainer>
         )}
 
-        {/* {activeTab === "All Order Ticket Groups" && (
+        {activeTab === "All Order Ticket Groups" && (
           <TableContainer className="mb-8">
             <Table>
               <TableHeader>
@@ -125,22 +126,25 @@ function ProductCategories() {
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable1.map((user, i) => (
+                {data.data.map((orderTicketGroup, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
                         <Input
                           type="checkbox"
-                          name={user.name}
-                          id={user.name}
+                          name={orderTicketGroup.selected}
+                          id={orderTicketGroup.orderTicketGroupId}
                           className="mr-2"
                         />
                         <div>
                           <Link
-                            to={"/app/settings/order-ticket-groups/" + i}
+                            to={
+                              "/app/settings/order-ticket-groups/" +
+                              orderTicketGroup.orderTicketGroupId
+                            }
                             className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                           >
-                            {user.name}
+                            {orderTicketGroup.name}
                           </Link>
                         </div>
                       </div>
@@ -158,7 +162,7 @@ function ProductCategories() {
               />
             </TableFooter>
           </TableContainer>
-        )} */}
+        )}
       </div>
     </>
   );
