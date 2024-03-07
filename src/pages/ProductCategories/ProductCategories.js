@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from "react";
-
-import PageTitle from "../../components/Typography/PageTitle";
-import SectionTitle from "../../components/Typography/SectionTitle";
 import {
   Table,
   TableHeader,
@@ -17,21 +14,23 @@ import {
   Input,
 } from "@windmill/react-ui";
 import Tabs from "../../components/Tabs";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
-
+import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import axiosClient from "../../apiClient";
+import { getObjectKeys } from "../../utils/demo/helper";
 
+
+const tabMapObj = {
+  "All Product Categories": "categories",
+  "All Order Ticket Groups": "orderTicketGroups",
+};
 function ProductCategories() {
-  const tabs = ["All Product Categories", "All Order Ticket Groups"];
+  const tabs = getObjectKeys(tabMapObj);
   const [tableData, setTableData] = useState(1);
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const resultsPerPage = 10;
   let totalResults = 0;
-  const tabMapObj = {
-    "All Product Categories": "categories",
-    "All Order Ticket Groups": "orderTicketGroups",
-  };
+
 
   const { isLoading, data } = useQuery(tabMapObj[activeTab], () => {
     return axiosClient.get(

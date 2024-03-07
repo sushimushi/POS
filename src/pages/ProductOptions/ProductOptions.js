@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from "react";
-
-import PageTitle from "../../components/Typography/PageTitle";
-import SectionTitle from "../../components/Typography/SectionTitle";
 import {
   Table,
   TableHeader,
@@ -17,68 +14,46 @@ import {
   Input,
 } from "@windmill/react-ui";
 import Tabs from "../../components/Tabs";
-
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Link } from "react-router-dom";
+import { useQuery } from "react-query";
+import axiosClient from "../../apiClient";
+import { getObjectKeys } from "../../utils/demo/helper";
 
 import response from "../../utils/demo/tableData";
-// make a copy of the data, for the second table
 const response2 = response.concat([]);
 
+const tabMapObj = {
+  Variants: "variants",
+  "Variant Groups": "variantGroups",
+  Addons: "addons",
+  "Addon Groups": "addonGroups",
+  "Item Groups": "itemGroups",
+};
+
 function ProductOptions() {
-  /**
-   * DISCLAIMER: This code could be badly improved, but for the sake of the example
-   * and readability, all the logic for both table are here.
-   * You would be better served by dividing each table in its own
-   * component, like Table(?) and TableWithActions(?) hiding the
-   * presentation details away from the page view.
-   */
-
   // setup pages control for every table
-  const [pageTable1, setPageTable1] = useState(1);
-
-  // setup data for every table
-  const [dataTable1, setDataTable1] = useState([]);
-
-  // pagination setup
-  const resultsPerPage = 10;
-  const totalResults = response.length;
-
-  // tab names for receipt page
-  const tabs = [
-    "Variants",
-    "Variant Groups",
-    "Addons",
-    "Addon Groups",
-    "Item Groups",
-  ];
-  // page Tabs setup
+  const tabs = getObjectKeys(tabMapObj);
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
-  // pagination change control
-  function onPageChangeTable1(p) {
-    setPageTable1(p);
-  }
-
-  // on page change, load new sliced data
-  // here you would make another server request for new data
-  useEffect(() => {
-    setDataTable1(
-      response.slice(
-        (pageTable1 - 1) * resultsPerPage,
-        pageTable1 * resultsPerPage
-      )
+  const { isLoading, data } = useQuery(tabMapObj[activeTab], () => {
+    return axiosClient.get(
+      tabMapObj[activeTab]
+        .replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2")
+        .toLowerCase()
     );
-  }, [pageTable1]);
+  });
 
-  return (
+  return isLoading ? (
+    <p>Loading...</p>
+  ) : (
     <>
       <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="py-4">
-        {activeTab === "Variants" && <Variants />}
-        {activeTab === "Variant Groups" && <VariantsGroups />}
-        {activeTab === "Addons" && <Addons />}
-        {activeTab === "Addon Groups" && <AddonsGroups />}
-        {activeTab === "Item Groups" && <ItemGroups />}
+        {activeTab === "Variants" && <Variants data={data} />}
+        {activeTab === "Variant Groups" && <VariantsGroups data={data} />}
+        {activeTab === "Addons" && <Addons data={data} />}
+        {activeTab === "Addon Groups" && <AddonsGroups data={data} />}
+        {activeTab === "Item Groups" && <ItemGroups data={data} />}
       </div>
     </>
   );
@@ -86,7 +61,159 @@ function ProductOptions() {
 
 export default ProductOptions;
 
-function Variants() {
+function Variants({ data }) {
+  const [tableData, setTableData] = useState(1);
+
+  // pagination change control
+  function onPageChangeTable1(p) {
+    setTableData(p);
+  }
+
+  // pagination setup
+  const resultsPerPage = 10;
+  let totalResults = 0;
+  useEffect(() => {
+    if (data) {
+      totalResults = data.data.length;
+    }
+  }, [data]);
+
+  return (
+    <TableContainer className="mb-8">
+      <Table>
+        <TableHeader>
+          <tr>
+            <TableCell>
+              <Input type="checkbox" className="mr-2" />
+              Variant Name
+            </TableCell>
+            <TableCell>Price</TableCell>
+            <TableCell>Sort Order</TableCell>
+            {/* <TableCell>Is Linked To A Variant Group?</TableCell> */}
+          </tr>
+        </TableHeader>
+        <TableBody>
+          {data.data.map((variant, i) => (
+            <TableRow key={i}>
+              <TableCell>
+                <div className="flex items-center text-sm">
+                  <Input
+                    type="checkbox"
+                    name={variant.selected}
+                    id={variant.variantId}
+                    className="mr-2"
+                  />
+                  <div>
+                    <Link
+                      to={"/app/settings/variants/" + i}
+                      className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
+                    >
+                      {variant.name}
+                    </Link>
+                  </div>
+                </div>
+              </TableCell>
+              <TableCell>
+                <span className="text-sm">${variant.price}</span>
+              </TableCell>
+              <TableCell>
+                <Badge>{variant.sortOrder}</Badge>
+              </TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <TableFooter>
+        <Pagination
+          totalResults={totalResults}
+          resultsPerPage={resultsPerPage}
+          onChange={onPageChangeTable1}
+          label="Table navigation"
+        />
+      </TableFooter>
+    </TableContainer>
+  );
+}
+
+function VariantsGroups({ data }) {
+  const [tableData, setTableData] = useState(1);
+
+  // pagination change control
+  function onPageChangeTable1(p) {
+    setTableData(p);
+  }
+
+  // pagination setup
+  const resultsPerPage = 10;
+  let totalResults = 0;
+  useEffect(() => {
+    if (data) {
+      totalResults = data.data.length;
+    }
+  }, [data]);
+
+  return (
+    <TableContainer className="mb-8">
+      <Table>
+        <TableHeader>
+          <tr>
+            <TableCell>
+              <Input type="checkbox" className="mr-2" />
+              Variant Group Name
+            </TableCell>
+            <TableCell>Variants</TableCell>
+            <TableCell>Sort Order</TableCell>
+          </tr>
+        </TableHeader>
+        <TableBody>
+          {data.data.map((variantGroup, i) => (
+            <TableRow key={i}>
+              <TableCell>
+                <div className="flex items-center text-sm">
+                  <Input
+                    type="checkbox"
+                    name={variantGroup.selected}
+                    id={variantGroup.variantGroupId}
+                    className="mr-2"
+                  />
+                  <div>
+                    <Link
+                      to={"/app/settings/variant-groups/" + i}
+                      className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
+                    >
+                      {variantGroup.name}
+                    </Link>
+                  </div>
+                </div>
+              </TableCell>
+              <TableCell>
+                <span className="text-sm">
+                  {variantGroup.variantIds.length}
+                </span>
+              </TableCell>
+              <TableCell>
+                <Badge type={variantGroup.order}>{variantGroup.order}</Badge>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <TableFooter>
+        <Pagination
+          totalResults={totalResults}
+          resultsPerPage={resultsPerPage}
+          onChange={onPageChangeTable1}
+          label="Table navigation"
+        />
+      </TableFooter>
+    </TableContainer>
+  );
+}
+
+function Addons({ data }) {
+  console.log(data);
+
   // setup pages control for every table
   const [pageTable1, setPageTable1] = useState(1);
 
@@ -119,12 +246,11 @@ function Variants() {
           <tr>
             <TableCell>
               <Input type="checkbox" className="mr-2" />
-              Variant Name
+              Addon Name
             </TableCell>
-            <TableCell>Variant Comment</TableCell>
             <TableCell>Price</TableCell>
             <TableCell>Sort Order</TableCell>
-            <TableCell>Is Linked To A Variant Group?</TableCell>
+            <TableCell>Is Linked To A Addon Group?</TableCell>
           </tr>
         </TableHeader>
         <TableBody>
@@ -140,7 +266,7 @@ function Variants() {
                   />
                   <div>
                     <Link
-                      to={"/app/settings/variants/" + i}
+                      to={"/app/settings/addons/" + i}
                       className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                     >
                       {user.name}
@@ -153,11 +279,6 @@ function Variants() {
               </TableCell>
               <TableCell>
                 <Badge type={user.status}>{user.status}</Badge>
-              </TableCell>
-              <TableCell>
-                <span className="text-sm">
-                  {new Date(user.date).toLocaleDateString()}
-                </span>
               </TableCell>
               <TableCell>
                 <span className="text-sm">
@@ -180,7 +301,9 @@ function Variants() {
   );
 }
 
-function VariantsGroups() {
+function AddonsGroups({ data }) {
+  console.log(data);
+
   // setup pages control for every table
   const [pageTable1, setPageTable1] = useState(1);
 
@@ -208,61 +331,62 @@ function VariantsGroups() {
   }, [pageTable1]);
   return (
     <TableContainer className="mb-8">
-    <Table>
-      <TableHeader>
-        <tr>
-          <TableCell>
-            <Input type="checkbox" className="mr-2" />
-            Variant Group Name
-          </TableCell>
-          <TableCell>Variants</TableCell>
-          <TableCell>Sort Order</TableCell>
-        </tr>
-      </TableHeader>
-      <TableBody>
-        {dataTable1.map((user, i) => (
-          <TableRow key={i}>
+      <Table>
+        <TableHeader>
+          <tr>
             <TableCell>
-              <div className="flex items-center text-sm">
-                <Input
-                  type="checkbox"
-                  name={user.name}
-                  id={user.name}
-                  className="mr-2"
-                />
-                <div>
-                  <Link
-                    to={"/app/settings/variant-groups/" + i}
-                    className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
-                  >
-                    {user.name}
-                  </Link>
+              <Input type="checkbox" className="mr-2" />
+              Addon Group Name
+            </TableCell>
+            <TableCell>Addons</TableCell>
+            <TableCell>Sort Order</TableCell>
+          </tr>
+        </TableHeader>
+        <TableBody>
+          {dataTable1.map((user, i) => (
+            <TableRow key={i}>
+              <TableCell>
+                <div className="flex items-center text-sm">
+                  <Input
+                    type="checkbox"
+                    name={user.name}
+                    id={user.name}
+                    className="mr-2"
+                  />
+                  <div>
+                    <Link
+                      to={"/app/settings/addon-groups/" + i}
+                      className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
+                    >
+                      {user.name}
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </TableCell>
-            <TableCell>
-              <span className="text-sm">$ {user.amount}</span>
-            </TableCell>
-            <TableCell>
-              <Badge type={user.status}>{user.status}</Badge>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-    <TableFooter>
-      <Pagination
-        totalResults={totalResults}
-        resultsPerPage={resultsPerPage}
-        onChange={onPageChangeTable1}
-        label="Table navigation"
-      />
-    </TableFooter>
-  </TableContainer>
+              </TableCell>
+              <TableCell>
+                <span className="text-sm">$ {user.amount}</span>
+              </TableCell>
+              <TableCell>
+                <Badge type={user.status}>{user.status}</Badge>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <TableFooter>
+        <Pagination
+          totalResults={totalResults}
+          resultsPerPage={resultsPerPage}
+          onChange={onPageChangeTable1}
+          label="Table navigation"
+        />
+      </TableFooter>
+    </TableContainer>
   );
 }
 
-function Addons() {
+function ItemGroups({ data }) {
+  console.log(data);
   // setup pages control for every table
   const [pageTable1, setPageTable1] = useState(1);
 
@@ -290,222 +414,52 @@ function Addons() {
   }, [pageTable1]);
   return (
     <TableContainer className="mb-8">
-    <Table>
-      <TableHeader>
-        <tr>
-          <TableCell>
-            <Input type="checkbox" className="mr-2" />
-            Addon Name
-          </TableCell>
-          <TableCell>Price</TableCell>
-          <TableCell>Sort Order</TableCell>
-          <TableCell>Is Linked To A Addon Group?</TableCell>
-        </tr>
-      </TableHeader>
-      <TableBody>
-        {dataTable1.map((user, i) => (
-          <TableRow key={i}>
+      <Table>
+        <TableHeader>
+          <tr>
             <TableCell>
-              <div className="flex items-center text-sm">
-                <Input
-                  type="checkbox"
-                  name={user.name}
-                  id={user.name}
-                  className="mr-2"
-                />
-                <div>
-                  <Link
-                    to={"/app/settings/addons/" + i}
-                    className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
-                  >
-                    {user.name}
-                  </Link>
+              <Input type="checkbox" className="mr-2" />
+              Item Group Name
+            </TableCell>
+            <TableCell>Items</TableCell>
+          </tr>
+        </TableHeader>
+        <TableBody>
+          {dataTable1.map((user, i) => (
+            <TableRow key={i}>
+              <TableCell>
+                <div className="flex items-center text-sm">
+                  <Input
+                    type="checkbox"
+                    name={user.name}
+                    id={user.name}
+                    className="mr-2"
+                  />
+                  <div>
+                    <Link
+                      to={"/app/settings/item-groups/" + i}
+                      className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
+                    >
+                      {user.name}
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </TableCell>
-            <TableCell>
-              <span className="text-sm">$ {user.amount}</span>
-            </TableCell>
-            <TableCell>
-              <Badge type={user.status}>{user.status}</Badge>
-            </TableCell>
-            <TableCell>
-              <span className="text-sm">
-                {new Date(user.date).toLocaleDateString()}
-              </span>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-    <TableFooter>
-      <Pagination
-        totalResults={totalResults}
-        resultsPerPage={resultsPerPage}
-        onChange={onPageChangeTable1}
-        label="Table navigation"
-      />
-    </TableFooter>
-  </TableContainer>
-  );
-}
-
-function AddonsGroups() {
-  // setup pages control for every table
-  const [pageTable1, setPageTable1] = useState(1);
-
-  // setup data for every table
-  const [dataTable1, setDataTable1] = useState([]);
-
-  // pagination setup
-  const resultsPerPage = 10;
-  const totalResults = response.length;
-
-  // pagination change control
-  function onPageChangeTable1(p) {
-    setPageTable1(p);
-  }
-
-  // on page change, load new sliced data
-  // here you would make another server request for new data
-  useEffect(() => {
-    setDataTable1(
-      response.slice(
-        (pageTable1 - 1) * resultsPerPage,
-        pageTable1 * resultsPerPage
-      )
-    );
-  }, [pageTable1]);
-  return (
-    <TableContainer className="mb-8">
-    <Table>
-      <TableHeader>
-        <tr>
-          <TableCell>
-            <Input type="checkbox" className="mr-2" />
-            Addon Group Name
-          </TableCell>
-          <TableCell>Addons</TableCell>
-          <TableCell>Sort Order</TableCell>
-        </tr>
-      </TableHeader>
-      <TableBody>
-        {dataTable1.map((user, i) => (
-          <TableRow key={i}>
-            <TableCell>
-              <div className="flex items-center text-sm">
-                <Input
-                  type="checkbox"
-                  name={user.name}
-                  id={user.name}
-                  className="mr-2"
-                />
-                <div>
-                  <Link
-                    to={"/app/settings/addon-groups/" + i}
-                    className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
-                  >
-                    {user.name}
-                  </Link>
-                </div>
-              </div>
-            </TableCell>
-            <TableCell>
-              <span className="text-sm">$ {user.amount}</span>
-            </TableCell>
-            <TableCell>
-              <Badge type={user.status}>{user.status}</Badge>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-    <TableFooter>
-      <Pagination
-        totalResults={totalResults}
-        resultsPerPage={resultsPerPage}
-        onChange={onPageChangeTable1}
-        label="Table navigation"
-      />
-    </TableFooter>
-  </TableContainer>
-  );
-}
-
-function ItemGroups() {
-  // setup pages control for every table
-  const [pageTable1, setPageTable1] = useState(1);
-
-  // setup data for every table
-  const [dataTable1, setDataTable1] = useState([]);
-
-  // pagination setup
-  const resultsPerPage = 10;
-  const totalResults = response.length;
-
-  // pagination change control
-  function onPageChangeTable1(p) {
-    setPageTable1(p);
-  }
-
-  // on page change, load new sliced data
-  // here you would make another server request for new data
-  useEffect(() => {
-    setDataTable1(
-      response.slice(
-        (pageTable1 - 1) * resultsPerPage,
-        pageTable1 * resultsPerPage
-      )
-    );
-  }, [pageTable1]);
-  return (
-    <TableContainer className="mb-8">
-    <Table>
-      <TableHeader>
-        <tr>
-          <TableCell>
-            <Input type="checkbox" className="mr-2" />
-            Item Group Name
-          </TableCell>
-          <TableCell>Items</TableCell>
-        </tr>
-      </TableHeader>
-      <TableBody>
-        {dataTable1.map((user, i) => (
-          <TableRow key={i}>
-            <TableCell>
-              <div className="flex items-center text-sm">
-                <Input
-                  type="checkbox"
-                  name={user.name}
-                  id={user.name}
-                  className="mr-2"
-                />
-                <div>
-                  <Link
-                    to={"/app/settings/item-groups/" + i}
-                    className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
-                  >
-                    {user.name}
-                  </Link>
-                </div>
-              </div>
-            </TableCell>
-            <TableCell>
-              <span className="text-sm">$ {user.amount}</span>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-    <TableFooter>
-      <Pagination
-        totalResults={totalResults}
-        resultsPerPage={resultsPerPage}
-        onChange={onPageChangeTable1}
-        label="Table navigation"
-      />
-    </TableFooter>
-  </TableContainer>
+              </TableCell>
+              <TableCell>
+                <span className="text-sm">$ {user.amount}</span>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <TableFooter>
+        <Pagination
+          totalResults={totalResults}
+          resultsPerPage={resultsPerPage}
+          onChange={onPageChangeTable1}
+          label="Table navigation"
+        />
+      </TableFooter>
+    </TableContainer>
   );
 }
