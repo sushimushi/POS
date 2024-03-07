@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Link } from "react-router-dom";
 import { CameraLinedIcon } from "../../icons";
 import { Input, Button } from "@windmill/react-ui";
 import { useMutation, useQuery } from "react-query";
