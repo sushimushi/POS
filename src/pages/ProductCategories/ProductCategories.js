@@ -19,24 +19,32 @@ import { useQuery } from "react-query";
 import axiosClient from "../../apiClient";
 import { getObjectKeys } from "../../utils/demo/helper";
 
-
 const tabMapObj = {
   "All Product Categories": "categories",
   "All Order Ticket Groups": "orderTicketGroups",
 };
 function ProductCategories() {
+  const accountId = localStorage.getItem("accountId");
   const tabs = getObjectKeys(tabMapObj);
   const [tableData, setTableData] = useState(1);
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const resultsPerPage = 10;
   let totalResults = 0;
 
-
   const { isLoading, data } = useQuery(tabMapObj[activeTab], () => {
     return axiosClient.get(
       tabMapObj[activeTab]
         .replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2")
-        .toLowerCase()
+        .toLowerCase(),
+      {
+        params: {
+          filter: {
+            where: {
+              accountId: accountId,
+            },
+          },
+        },
+      }
     );
   });
 
@@ -94,9 +102,7 @@ function ProductCategories() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">
-                        $ {category.orderTicketGroupId}
-                      </span>
+                      <span className="text-sm">{category.sortOrder}</span>
                     </TableCell>
                   </TableRow>
                 ))}

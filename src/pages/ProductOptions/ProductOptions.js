@@ -35,11 +35,22 @@ function ProductOptions() {
   const tabs = getObjectKeys(tabMapObj);
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
+  const accountId = localStorage.getItem("accountId");
+
   const { isLoading, data } = useQuery(tabMapObj[activeTab], () => {
     return axiosClient.get(
       tabMapObj[activeTab]
         .replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2")
-        .toLowerCase()
+        .toLowerCase(),
+      {
+        params: {
+          filter: {
+            where: {
+              accountId: accountId,
+            },
+          },
+        },
+      }
     );
   });
 
@@ -105,7 +116,7 @@ function Variants({ data }) {
                   />
                   <div>
                     <Link
-                      to={"/app/settings/variants/" + i}
+                      to={"/app/settings/variants/" + variant.variantId}
                       className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                     >
                       {variant.name}
@@ -179,7 +190,10 @@ function VariantsGroups({ data }) {
                   />
                   <div>
                     <Link
-                      to={"/app/settings/variant-groups/" + i}
+                      to={
+                        "/app/settings/variant-groups/" +
+                        variantGroup.variantGroupId
+                      }
                       className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                     >
                       {variantGroup.name}
@@ -212,33 +226,21 @@ function VariantsGroups({ data }) {
 }
 
 function Addons({ data }) {
-  console.log(data);
-
-  // setup pages control for every table
-  const [pageTable1, setPageTable1] = useState(1);
-
-  // setup data for every table
-  const [dataTable1, setDataTable1] = useState([]);
-
-  // pagination setup
-  const resultsPerPage = 10;
-  const totalResults = response.length;
+  const [tableData, setTableData] = useState(1);
 
   // pagination change control
   function onPageChangeTable1(p) {
-    setPageTable1(p);
+    setTableData(p);
   }
 
-  // on page change, load new sliced data
-  // here you would make another server request for new data
+  // pagination setup
+  const resultsPerPage = 10;
+  let totalResults = 0;
   useEffect(() => {
-    setDataTable1(
-      response.slice(
-        (pageTable1 - 1) * resultsPerPage,
-        pageTable1 * resultsPerPage
-      )
-    );
-  }, [pageTable1]);
+    if (data) {
+      totalResults = data.data.length;
+    }
+  }, [data]);
   return (
     <TableContainer className="mb-8">
       <Table>
@@ -250,18 +252,18 @@ function Addons({ data }) {
             </TableCell>
             <TableCell>Price</TableCell>
             <TableCell>Sort Order</TableCell>
-            <TableCell>Is Linked To A Addon Group?</TableCell>
+            {/* <TableCell>Is Linked To A Addon Group?</TableCell> */}
           </tr>
         </TableHeader>
         <TableBody>
-          {dataTable1.map((user, i) => (
+          {data.data.map((addon, i) => (
             <TableRow key={i}>
               <TableCell>
                 <div className="flex items-center text-sm">
                   <Input
                     type="checkbox"
-                    name={user.name}
-                    id={user.name}
+                    name={addon.selected}
+                    id={addon.addonId}
                     className="mr-2"
                   />
                   <div>
@@ -269,22 +271,21 @@ function Addons({ data }) {
                       to={"/app/settings/addons/" + i}
                       className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                     >
-                      {user.name}
+                      {addon.name}
                     </Link>
                   </div>
                 </div>
               </TableCell>
               <TableCell>
-                <span className="text-sm">$ {user.amount}</span>
+                <span className="text-sm">${addon.price}</span>
               </TableCell>
               <TableCell>
-                <Badge type={user.status}>{user.status}</Badge>
+                <Badge type={addon.status}>{addon.order}</Badge>
               </TableCell>
-              <TableCell>
+              {/* <TableCell>
                 <span className="text-sm">
-                  {new Date(user.date).toLocaleDateString()}
                 </span>
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>
@@ -302,33 +303,22 @@ function Addons({ data }) {
 }
 
 function AddonsGroups({ data }) {
-  console.log(data);
-
-  // setup pages control for every table
-  const [pageTable1, setPageTable1] = useState(1);
-
-  // setup data for every table
-  const [dataTable1, setDataTable1] = useState([]);
-
-  // pagination setup
-  const resultsPerPage = 10;
-  const totalResults = response.length;
+  const [tableData, setTableData] = useState(1);
 
   // pagination change control
   function onPageChangeTable1(p) {
-    setPageTable1(p);
+    setTableData(p);
   }
 
-  // on page change, load new sliced data
-  // here you would make another server request for new data
+  // pagination setup
+  const resultsPerPage = 10;
+  let totalResults = 0;
   useEffect(() => {
-    setDataTable1(
-      response.slice(
-        (pageTable1 - 1) * resultsPerPage,
-        pageTable1 * resultsPerPage
-      )
-    );
-  }, [pageTable1]);
+    if (data) {
+      totalResults = data.data.length;
+    }
+  }, [data]);
+
   return (
     <TableContainer className="mb-8">
       <Table>
@@ -343,31 +333,33 @@ function AddonsGroups({ data }) {
           </tr>
         </TableHeader>
         <TableBody>
-          {dataTable1.map((user, i) => (
+          {data.data.map((addonGroup, i) => (
             <TableRow key={i}>
               <TableCell>
                 <div className="flex items-center text-sm">
                   <Input
                     type="checkbox"
-                    name={user.name}
-                    id={user.name}
+                    name={addonGroup.selected}
+                    id={addonGroup.addonGroupId}
                     className="mr-2"
                   />
                   <div>
                     <Link
-                      to={"/app/settings/addon-groups/" + i}
+                      to={
+                        "/app/settings/addon-groups/" + addonGroup.addonGroupId
+                      }
                       className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                     >
-                      {user.name}
+                      {addonGroup.name}
                     </Link>
                   </div>
                 </div>
               </TableCell>
               <TableCell>
-                <span className="text-sm">$ {user.amount}</span>
+                <span className="text-sm">{addonGroup.addonIds.length}</span>
               </TableCell>
               <TableCell>
-                <Badge type={user.status}>{user.status}</Badge>
+                <Badge type={addonGroup.status}>{addonGroup.order}</Badge>
               </TableCell>
             </TableRow>
           ))}
@@ -386,32 +378,22 @@ function AddonsGroups({ data }) {
 }
 
 function ItemGroups({ data }) {
-  console.log(data);
-  // setup pages control for every table
-  const [pageTable1, setPageTable1] = useState(1);
-
-  // setup data for every table
-  const [dataTable1, setDataTable1] = useState([]);
-
-  // pagination setup
-  const resultsPerPage = 10;
-  const totalResults = response.length;
+  const [tableData, setTableData] = useState(1);
 
   // pagination change control
   function onPageChangeTable1(p) {
-    setPageTable1(p);
+    setTableData(p);
   }
 
-  // on page change, load new sliced data
-  // here you would make another server request for new data
+  // pagination setup
+  const resultsPerPage = 10;
+  let totalResults = 0;
   useEffect(() => {
-    setDataTable1(
-      response.slice(
-        (pageTable1 - 1) * resultsPerPage,
-        pageTable1 * resultsPerPage
-      )
-    );
-  }, [pageTable1]);
+    if (data) {
+      totalResults = data.data.length;
+    }
+  }, [data]);
+
   return (
     <TableContainer className="mb-8">
       <Table>
@@ -425,14 +407,14 @@ function ItemGroups({ data }) {
           </tr>
         </TableHeader>
         <TableBody>
-          {dataTable1.map((user, i) => (
+          {data.data.map((itemGroup, i) => (
             <TableRow key={i}>
               <TableCell>
                 <div className="flex items-center text-sm">
                   <Input
                     type="checkbox"
-                    name={user.name}
-                    id={user.name}
+                    name={itemGroup.selected}
+                    id={itemGroup.itemGroupId}
                     className="mr-2"
                   />
                   <div>
@@ -440,13 +422,15 @@ function ItemGroups({ data }) {
                       to={"/app/settings/item-groups/" + i}
                       className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                     >
-                      {user.name}
+                      {itemGroup.name}
                     </Link>
                   </div>
                 </div>
               </TableCell>
               <TableCell>
-                <span className="text-sm">$ {user.amount}</span>
+                <span className="text-sm">
+                  {itemGroup.uniqueItemIds.length}
+                </span>
               </TableCell>
             </TableRow>
           ))}
