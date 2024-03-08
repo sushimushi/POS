@@ -20,12 +20,11 @@ import axiosClient from "../../apiClient";
 import { getObjectKeys } from "../../utils/demo/helper";
 
 import response from "../../utils/demo/tableData";
-const response2 = response.concat([]);
 
 const tabMapObj = {
-  Variants: "variants",
+  "Variants": "variants",
   "Variant Groups": "variantGroups",
-  Addons: "addons",
+  "Addons": "addons",
   "Addon Groups": "addonGroups",
   "Item Groups": "itemGroups",
 };
@@ -73,7 +72,7 @@ function ProductOptions() {
 export default ProductOptions;
 
 function Variants({ data }) {
-  const [tableData, setTableData] = useState(1);
+  const [tableData, setTableData] = useState(data);
 
   // pagination change control
   function onPageChangeTable1(p) {

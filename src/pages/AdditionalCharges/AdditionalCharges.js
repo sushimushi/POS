@@ -17,49 +17,52 @@ import Tabs from "../../components/Tabs";
 
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import response from "../../utils/demo/tableData";
+import { getObjectKeys } from "../../utils/demo/helper";
+import { useQuery } from "react-query";
+import axiosClient from "../../apiClient";
 // make a copy of the data, for the second table
 
+const tabMapObj = {
+  "Addtional Charges": "addtionalCharges",
+};
+
 function AdditionalCharges() {
-  /**
-   * DISCLAIMER: This code could be badly improved, but for the sake of the example
-   * and readability, all the logic for both table are here.
-   * You would be better served by dividing each table in its own
-   * component, like Table(?) and TableWithActions(?) hiding the
-   * presentation details away from the page view.
-   */
-
-  // setup pages control for every table
-  const [pageTable1, setPageTable1] = useState(1);
-
-  // setup data for every table
-  const [dataTable1, setDataTable1] = useState([]);
-
-  // pagination setup
-  const resultsPerPage = 10;
-  const totalResults = response.length;
-
-  // tab names for receipt page
-  const tabs = ["Addtional Charges"];
-  // page Tabs setup
+  const tabs = getObjectKeys(tabMapObj);
   const [activeTab, setActiveTab] = useState(tabs[0]);
+
+  const accountId = localStorage.getItem("accountId");
+
+  const { isLoading, data } = useQuery("addtionalCharges", () => {
+    return axiosClient.get("additional-charge-details", {
+      params: {
+        filter: {
+          where: {
+            accountId: accountId,
+          },
+        },
+      },
+    });
+  });
+  console.log(data);
+
+  const resultsPerPage = 10;
+  let totalResults = 0;
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+      totalResults = data.data.length;
+    }
+  }, [data]);
+
+  const [tableData, setTableData] = useState(data);
 
   // pagination change control
   function onPageChangeTable1(p) {
-    setPageTable1(p);
+    setTableData(p);
   }
-
-  // on page change, load new sliced data
-  // here you would make another server request for new data
-  useEffect(() => {
-    setDataTable1(
-      response.slice(
-        (pageTable1 - 1) * resultsPerPage,
-        pageTable1 * resultsPerPage
-      )
-    );
-  }, [pageTable1]);
-
-  return (
+  return isLoading ? (
+    <p>Loading...</p>
+  ) : (
     <>
       <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="py-4">
@@ -79,14 +82,14 @@ function AdditionalCharges() {
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable1.map((user, i) => (
+                {data.data.map((addtionalCharges, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
                         <Input
                           type="checkbox"
-                          name={user.name}
-                          id={user.name}
+                          name={addtionalCharges.selected}
+                          id={addtionalCharges.additionalChargeDetailsId}
                           className="mr-2"
                         />
                         <div>
@@ -94,25 +97,25 @@ function AdditionalCharges() {
                             to={"/app/settings/additional-charges/" + i}
                             className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                           >
-                            {user.name}
+                            {addtionalCharges.name}
                           </Link>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">$ {user.amount}</span>
+                      <span className="text-sm">{addtionalCharges.type}</span>
                     </TableCell>
                     <TableCell>
-                      <Badge type={user.status}>{user.status}</Badge>
+                      <span className="text-sm">{addtionalCharges.value}</span>
                     </TableCell>
                     <TableCell>
                       <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
+                        {addtionalCharges.taxGroup}
                       </span>
                     </TableCell>
                     <TableCell>
                       <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
+                        {addtionalCharges.isAutomaticallyAdded ? "Yes" : "No"}
                       </span>
                     </TableCell>
                   </TableRow>

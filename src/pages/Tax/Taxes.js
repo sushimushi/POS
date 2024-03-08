@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from "react";
-
-import PageTitle from "../../components/Typography/PageTitle";
-import SectionTitle from "../../components/Typography/SectionTitle";
 import {
   Table,
   TableHeader,
@@ -17,57 +14,58 @@ import {
   Input,
 } from "@windmill/react-ui";
 import Tabs from "../../components/Tabs";
+import { Link } from "react-router-dom";
+import { useQuery } from "react-query";
+import axiosClient from "../../apiClient";
+import { getObjectKeys } from "../../utils/demo/helper";
 
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
-import response from "../../utils/demo/tableData";
-// make a copy of the data, for the second table
-const response2 = response.concat([]);
-
+const tabMapObj = {
+  "Taxes": "taxes",
+  "Tax Groups": "taxGroups",
+};
 function Taxes() {
-  /**
-   * DISCLAIMER: This code could be badly improved, but for the sake of the example
-   * and readability, all the logic for both table are here.
-   * You would be better served by dividing each table in its own
-   * component, like Table(?) and TableWithActions(?) hiding the
-   * presentation details away from the page view.
-   */
-
-  // setup pages control for every table
-  const [pageTable1, setPageTable1] = useState(1);
-
-  // setup data for every table
-  const [dataTable1, setDataTable1] = useState([]);
-
-  // pagination setup
-  const resultsPerPage = 10;
-  const totalResults = response.length;
-
-  // tab names for receipt page
-  const tabs = ["Taxes ", "Tax Groups"];
-  // page Tabs setup
+  const accountId = localStorage.getItem("accountId");
+  const tabs = getObjectKeys(tabMapObj);
+  const [tableData, setTableData] = useState(1);
   const [activeTab, setActiveTab] = useState(tabs[0]);
+  const resultsPerPage = 10;
+  let totalResults = 0;
+
+  const { isLoading, data } = useQuery(tabMapObj[activeTab], () => {
+    return axiosClient.get(
+      tabMapObj[activeTab]
+        .replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2")
+        .toLowerCase(),
+      {
+        params: {
+          filter: {
+            where: {
+              accountId: accountId,
+            },
+          },
+        },
+      }
+    );
+  });
+
+  useEffect(() => {
+    if (data) {
+      totalResults = data.length;
+    }
+  }, [data]);
 
   // pagination change control
   function onPageChangeTable1(p) {
-    setPageTable1(p);
+    setTableData(p);
   }
 
-  // on page change, load new sliced data
-  // here you would make another server request for new data
-  useEffect(() => {
-    setDataTable1(
-      response.slice(
-        (pageTable1 - 1) * resultsPerPage,
-        pageTable1 * resultsPerPage
-      )
-    );
-  }, [pageTable1]);
-
-  return (
+  return isLoading ? (
+    <p>Loading...</p>
+  ) : (
     <>
       <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="py-4">
-        {activeTab === "Taxes " && (
+        {activeTab === "Taxes" && (
           <TableContainer className="mb-8">
             <Table>
               <TableHeader>
@@ -77,36 +75,39 @@ function Taxes() {
                     Tax Name
                   </TableCell>
                   <TableCell>Tax Percent</TableCell>
-                  <TableCell>Is Linked To A Tax Group?</TableCell>
+                  {/* <TableCell>Is Linked To A Tax Group?</TableCell> */}
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable1.map((user, i) => (
+                {data.data.map((tax, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
                         <Input
                           type="checkbox"
-                          name={user.name}
-                          id={user.name}
+                          name={tax.selected}
+                          id={tax.taxId}
                           className="mr-2"
                         />
                         <div>
                           <Link
-                            to={"/app/settings/taxes/" + i}
+                            to={
+                              "/app/settings/product-categories/" +
+                              tax.taxId
+                            }
                             className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                           >
-                            {user.name}
+                            {tax.name}
                           </Link>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">$ {user.amount}</span>
+                      <span className="text-sm">{tax.percent}</span>
                     </TableCell>
-                    <TableCell>
-                      <Badge type={user.status}>{user.status}</Badge>
-                    </TableCell>
+                    {/* <TableCell>
+                      <span className="text-sm">{category.sortOrder}</span>
+                    </TableCell> */}
                   </TableRow>
                 ))}
               </TableBody>
@@ -121,6 +122,7 @@ function Taxes() {
             </TableFooter>
           </TableContainer>
         )}
+
         {activeTab === "Tax Groups" && (
           <TableContainer className="mb-8">
             <Table>
@@ -130,36 +132,40 @@ function Taxes() {
                     <Input type="checkbox" className="mr-2" />
                     Tax Group Name
                   </TableCell>
-                  <TableCell>Net Tax Percent</TableCell>
-                  <TableCell>Is Tax Included In Product Price?</TableCell>
+                  <TableCell>
+                    Net Tax Percent
+                  </TableCell>
+                  {/* <TableCell>
+                    Is Tax Included In Product Price?
+                  </TableCell> */}
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable1.map((user, i) => (
+                {data.data.map((taxGroup, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
                         <Input
                           type="checkbox"
-                          name={user.name}
-                          id={user.name}
+                          name={taxGroup.selected}
+                          id={taxGroup.taxGroupId}
                           className="mr-2"
                         />
                         <div>
                           <Link
-                            to={"/app/settings/tax-groups/" + i}
+                            to={
+                              "/app/settings/order-ticket-groups/" +
+                              taxGroup.taxGroupId
+                            }
                             className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                           >
-                            {user.name}
+                            {taxGroup.name}
                           </Link>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">$ {user.amount}</span>
-                    </TableCell>
-                    <TableCell>
-                      <Badge type={user.status}>{user.status}</Badge>
+                      <span>{taxGroup.total}</span>
                     </TableCell>
                   </TableRow>
                 ))}

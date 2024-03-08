@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import PageTitle from "../../components/Typography/PageTitle";
-import SectionTitle from "../../components/Typography/SectionTitle";
 import {
   Table,
   TableHeader,
@@ -20,55 +18,56 @@ import Tabs from "../../components/Tabs";
 
 import response from "../../utils/demo/tableData";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { getObjectKeys } from "../../utils/demo/helper";
+import { useQuery } from "react-query";
+import axiosClient from "../../apiClient";
 // make a copy of the data, for the second table
 const response2 = response.concat([]);
 
+const tabMapObj = {
+  "All Cashiers": "cashiers",
+  "All App Users": "appUsers",
+  "All Waiters": "waiters",
+  "All Kitchen Users": "kitchenUsers",
+};
+
 function Users() {
-  /**
-   * DISCLAIMER: This code could be badly improved, but for the sake of the example
-   * and readability, all the logic for both table are here.
-   * You would be better served by dividing each table in its own
-   * component, like Table(?) and TableWithActions(?) hiding the
-   * presentation details away from the page view.
-   */
-
   // setup pages control for every table
-  const [pageTable1, setPageTable1] = useState(1);
-
-  // setup data for every table
-  const [dataTable1, setDataTable1] = useState([]);
-
-  // pagination setup
-  const resultsPerPage = 10;
-  const totalResults = response.length;
-
-  // tab names for receipt page
-  const tabs = [
-    "All Cashiers",
-    "All App Users",
-    "All Waiters",
-    "All Kitchen Users",
-  ];
-  // page Tabs setup
+  const tabs = getObjectKeys(tabMapObj);
   const [activeTab, setActiveTab] = useState(tabs[0]);
+
+  const accountId = localStorage.getItem("accountId");
+
+  const { isLoading, data } = useQuery(tabMapObj[activeTab], () => {
+    return axiosClient.get("staff", {
+      params: {
+        filter: {
+          where: {
+            accountId: accountId,
+            role: tabMapObj[activeTab].slice(0, -1),
+          },
+        },
+      },
+    });
+  });
 
   // pagination change control
   function onPageChangeTable1(p) {
-    setPageTable1(p);
+    // setTableData(p);
   }
 
-  // on page change, load new sliced data
-  // here you would make another server request for new data
+  // pagination setup
+  const resultsPerPage = 10;
+  let totalResults = 0;
   useEffect(() => {
-    setDataTable1(
-      response.slice(
-        (pageTable1 - 1) * resultsPerPage,
-        pageTable1 * resultsPerPage
-      )
-    );
-  }, [pageTable1]);
+    if (data) {
+      totalResults = data.data.length;
+    }
+  }, [data]);
 
-  return (
+  return isLoading ? (
+    <p>Loading...</p>
+  ) : (
     <>
       <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="py-4">
@@ -87,14 +86,14 @@ function Users() {
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable1.map((user, i) => (
+                {data.data.map((staff, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
                         <Input
                           type="checkbox"
-                          name={user.name}
-                          id={user.name}
+                          name={staff.selected}
+                          id={staff.staffId}
                           className="mr-2"
                         />
                         <div>
@@ -102,21 +101,21 @@ function Users() {
                             to={"/app/settings/cashier-details/" + i}
                             className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                           >
-                            {user.name}
+                            {staff.name}
                           </Link>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">$ {user.amount}</span>
-                    </TableCell>
-                    <TableCell>
-                      <Badge type={user.status}>{user.status}</Badge>
+                      <span className="text-sm">{staff.pin}</span>
                     </TableCell>
                     <TableCell>
                       <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
+                        {staff.managerPermission ? "Yes" : "No"}
                       </span>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm">{/* registername */}</span>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -145,28 +144,30 @@ function Users() {
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable1.map((user, i) => (
+                {data.data.map((staff, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
                         <Input
                           type="checkbox"
-                          name={user.name}
-                          id={user.name}
+                          name={staff.selected}
+                          id={staff.staffId}
                           className="mr-2"
                         />
                         <div>
                           <Link
-                            to={"/app/settings/app-user-details/" + i}
+                            to={
+                              "/app/settings/app-user-details/" + staff.staffId
+                            }
                             className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                           >
-                            {user.name}
+                            {staff.name}
                           </Link>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">$ {user.amount}</span>
+                      <span className="text-sm">$ {staff.pin}</span>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -196,31 +197,31 @@ function Users() {
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable1.map((user, i) => (
+                {data.data.map((staff, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
                         <Input
                           type="checkbox"
-                          name={user.name}
-                          id={user.name}
+                          name={staff.name}
+                          id={staff.name}
                           className="mr-2"
                         />
                         <div>
                           <Link
-                            to={"/app/settings/waiter-details/" + i}
+                            to={"/app/settings/waiter-details/" + staff.staffId}
                             className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                           >
-                            {user.name}
+                            {staff.name}
                           </Link>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">$ {user.amount}</span>
+                      <span className="text-sm">{staff.pin}</span>
                     </TableCell>
                     <TableCell>
-                      <Badge type={user.status}>{user.status}</Badge>
+                      {/* <span className="text-sm">{registerName}</span> */}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -250,31 +251,34 @@ function Users() {
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable1.map((user, i) => (
+                {data.data.map((staff, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
                         <Input
                           type="checkbox"
-                          name={user.name}
-                          id={user.name}
+                          name={staff.name}
+                          id={staff.name}
                           className="mr-2"
                         />
                         <div>
                           <Link
-                            to={"/app/settings/kitchen-user-details/" + i}
+                            to={
+                              "/app/settings/kitchen-user-details/" +
+                              staff.staffId
+                            }
                             className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                           >
-                            {user.name}
+                            {staff.name}
                           </Link>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">$ {user.amount}</span>
+                      <span className="text-sm">{staff.pin}</span>
                     </TableCell>
                     <TableCell>
-                      <Badge type={user.status}>{user.status}</Badge>
+                      {/* <span className="text-sm">{registerName}</span> */}
                     </TableCell>
                   </TableRow>
                 ))}
