@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import PageTitle from "../../components/Typography/PageTitle";
-import SectionTitle from "../../components/Typography/SectionTitle";
 import {
   Table,
   TableHeader,
@@ -11,63 +9,51 @@ import {
   TableFooter,
   TableContainer,
   Badge,
-  Avatar,
-  Button,
   Pagination,
-  Input
+  Input,
 } from "@windmill/react-ui";
 import Tabs from "../../components/Tabs";
-
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { useMutation, useQuery } from "react-query";
+import axiosClient from "../../apiClient";
+
 import response from "../../utils/demo/tableData";
-// make a copy of the data, for the second table
-const response2 = response.concat([]);
 
-function DiscountRules() {
-  /**
-   * DISCLAIMER: This code could be badly improved, but for the sake of the example
-   * and readability, all the logic for both table are here.
-   * You would be better served by dividing each table in its own
-   * component, like Table(?) and TableWithActions(?) hiding the
-   * presentation details away from the page view.
-   */
-
-  // setup pages control for every table
-  const [pageTable1, setPageTable1] = useState(1);
-
-  // setup data for every table
-  const [dataTable1, setDataTable1] = useState([]);
-
-  // pagination setup
+function Registers() {
   const resultsPerPage = 10;
-  const totalResults = response.length;
+  let totalResults = 0;
+
+  const { isLoading, data } = useQuery("discountRuleList", () => {
+    return axiosClient.get("/discounts/");
+  });
 
   // tab names for receipt page
-  const tabs = ["All Discount Rules "];
+  const tabs = ["All DiscountRule"];
+
   // page Tabs setup
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
   // pagination change control
   function onPageChangeTable1(p) {
-    setPageTable1(p);
+    // setPageTable1(p);
   }
 
-  // on page change, load new sliced data
-  // here you would make another server request for new data
   useEffect(() => {
-    setDataTable1(
-      response.slice(
-        (pageTable1 - 1) * resultsPerPage,
-        pageTable1 * resultsPerPage
-      )
-    );
-  }, [pageTable1]);
+    if (data) {
+      console.log(data);
+      totalResults = data.length;
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return <>Loading... </>;
+  }
 
   return (
     <>
       <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="py-4">
-        {activeTab === "All Discount Rules " && (
+        {activeTab === "All DiscountRule" && (
           <TableContainer className="mb-8">
             <Table>
               <TableHeader>
@@ -79,56 +65,52 @@ function DiscountRules() {
                   <TableCell>Type</TableCell>
                   <TableCell>Level</TableCell>
                   <TableCell>Discount</TableCell>
-                  <TableCell>Start Date</TableCell>
+                  <TableCell>Start date</TableCell>
                   <TableCell>End Date</TableCell>
                   <TableCell>Status</TableCell>
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable1.map((user, i) => (
+                {data.data.map((discount, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
                         <Input
                           type="checkbox"
-                          name={user.name}
-                          id={user.name}
+                          name={discount.selected}
+                          id={discount.discountId}
                           className="mr-2"
                         />
                         <div>
                           <Link
-                            to={"/app/settings/discount-rules/" + i}
+                            to={
+                              "/app/settings/discounts/" + discount.discountId
+                            }
                             className="font-semibold hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
                           >
-                            {user.name}
+                            {discount.couponCode}
                           </Link>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">$ {user.amount}</span>
+                      <span className="text-sm">{discount.type}</span>
                     </TableCell>
                     <TableCell>
-                      <Badge type={user.status}>{user.status}</Badge>
+                      <span className="text-sm">{discount.level}</span>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
-                      </span>
+                      <span className="text-sm">{discount.discountAmount}</span>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
-                      </span>
+                      <span className="text-sm">{discount.startDate}</span>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
-                      </span>
+                      <span className="text-sm">{discount.endDate}</span>
                     </TableCell>
                     <TableCell>
                       <span className="text-sm">
-                        {new Date(user.date).toLocaleDateString()}
+                        {discount.visibility ? "active" : "inactive"}
                       </span>
                     </TableCell>
                   </TableRow>
@@ -150,4 +132,4 @@ function DiscountRules() {
   );
 }
 
-export default DiscountRules;
+export default Registers;
