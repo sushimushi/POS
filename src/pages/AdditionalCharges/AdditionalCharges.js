@@ -16,7 +16,6 @@ import {
 import Tabs from "../../components/Tabs";
 
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
-import response from "../../utils/demo/tableData";
 import { getObjectKeys } from "../../utils/demo/helper";
 import { useQuery } from "react-query";
 import axiosClient from "../../apiClient";
@@ -43,7 +42,6 @@ function AdditionalCharges() {
       },
     });
   });
-  console.log(data);
 
   const resultsPerPage = 10;
   let totalResults = 0;

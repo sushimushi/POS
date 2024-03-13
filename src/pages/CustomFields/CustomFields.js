@@ -10,61 +10,68 @@ import {
   TableContainer,
   Badge,
   Pagination,
-  Input
+  Input,
 } from "@windmill/react-ui";
 import Tabs from "../../components/Tabs";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { getObjectKeys } from "../../utils/demo/helper";
+import { useQuery } from "react-query";
+import axiosClient from "../../apiClient";
 
 import response from "../../utils/demo/tableData";
 // make a copy of the data, for the second table
 const response2 = response.concat([]);
+const tabs = [
+  "Payment Types",
+  "Petty Cash Categories",
+  "Additional Details",
+  "Tags",
+];
+const tabMapObj = {
+  "Payment Types": "paymentTypes",
+  "Petty Cash Categories": "pettyCashCategories",
+  "Additional Details": "additionalDetails",
+  Tags: "tags",
+};
 
-function DiscountRules() {
-  /**
-   * DISCLAIMER: This code could be badly improved, but for the sake of the example
-   * and readability, all the logic for both table are here.
-   * You would be better served by dividing each table in its own
-   * component, like Table(?) and TableWithActions(?) hiding the
-   * presentation details away from the page view.
-   */
-
-  // setup pages control for every table
-  const [pageTable1, setPageTable1] = useState(1);
-
-  // setup data for every table
-  const [dataTable1, setDataTable1] = useState([]);
-
-  // pagination setup
-  const resultsPerPage = 10;
-  const totalResults = response.length;
-
-  // tab names for receipt page
-  const tabs = [
-    "Payment Types",
-    "Petty Cash Categories",
-    "Additional Details",
-    "Tags",
-  ];
-  // page Tabs setup
+function CustomFields() {
+  const tabs = getObjectKeys(tabMapObj);
   const [activeTab, setActiveTab] = useState(tabs[0]);
+
+  const accountId = localStorage.getItem("accountId");
+
+  const { isLoading, data } = useQuery(tabMapObj[activeTab], () => {
+    return axiosClient.get("custom-fields", {
+      params: {
+        filter: {
+          where: {
+            accountId: accountId,
+            fieldType: tabMapObj[activeTab],
+          },
+        },
+      },
+    });
+  });
+
+  const resultsPerPage = 10;
+  let totalResults = 0;
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+      totalResults = data.data.length;
+    }
+  }, [data]);
+
+  const [tableData, setTableData] = useState(data);
 
   // pagination change control
   function onPageChangeTable1(p) {
-    setPageTable1(p);
+    setTableData(p);
   }
 
-  // on page change, load new sliced data
-  // here you would make another server request for new data
-  useEffect(() => {
-    setDataTable1(
-      response.slice(
-        (pageTable1 - 1) * resultsPerPage,
-        pageTable1 * resultsPerPage
-      )
-    );
-  }, [pageTable1]);
-
-  return (
+  return isLoading ? (
+    <p>Loading...</p>
+  ) : (
     <>
       <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="py-4">
@@ -81,7 +88,7 @@ function DiscountRules() {
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable1.map((user, i) => (
+                {data.data.map((user, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
@@ -131,7 +138,7 @@ function DiscountRules() {
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable1.map((user, i) => (
+                {data.data.map((user, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
@@ -182,7 +189,7 @@ function DiscountRules() {
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable1.map((user, i) => (
+                {data.data.map((user, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
@@ -237,7 +244,7 @@ function DiscountRules() {
                 </tr>
               </TableHeader>
               <TableBody>
-                {dataTable1.map((user, i) => (
+                {data.data.map((user, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
@@ -287,4 +294,4 @@ function DiscountRules() {
   );
 }
 
-export default DiscountRules;
+export default CustomFields;
