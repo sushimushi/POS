@@ -14,10 +14,8 @@ import {
 } from "@windmill/react-ui";
 import Tabs from "../../components/Tabs";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import axiosClient from "../../apiClient";
-
-import response from "../../utils/demo/tableData";
 
 function Registers() {
   const resultsPerPage = 10;

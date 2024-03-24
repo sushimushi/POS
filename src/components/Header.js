@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SidebarContext } from "../context/SidebarContext";
 import PageTitle from "../components/Typography/PageTitle";
 import {
@@ -18,8 +18,11 @@ import {
   Dropdown,
   DropdownItem,
   WindmillContext,
+  Select,
 } from "@windmill/react-ui";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
+import { useQuery } from "react-query";
+import axiosClient from "../apiClient";
 
 function Header({ pageHeader }) {
   const { mode, toggleMode } = useContext(WindmillContext);
@@ -38,10 +41,21 @@ function Header({ pageHeader }) {
     setIsProfileMenuOpen(!isProfileMenuOpen);
   }
 
+  const { isLoading, data } = useQuery("registerList", () => {
+    return axiosClient.get("/registers/");
+  });
+
   function logout() {
     localStorage.removeItem("authToken");
     history.replace("/login");
   }
+
+  function handleSelectChange(event) {
+    const selectedValue = event.target.value;
+    localStorage.setItem("currentRegister", selectedValue);
+  }
+
+  const location = useLocation();
 
   return (
     <header className="z-40 py-4 bg-white shadow-bottom dark:bg-gray-800">
@@ -68,6 +82,21 @@ function Header({ pageHeader }) {
             <MenuIcon className="w-6 h-6" aria-hidden="true" />
           </button> */}
         </div>
+
+        {!isLoading && (
+          <div className="mr-2">
+            <Select
+              id="selectOption"
+              className="mt-1"
+              onChange={handleSelectChange}
+            >
+              {data.data.map((register) => (
+                <option value={register.registerId}>{register.name}</option>
+              ))}
+            </Select>
+          </div>
+        )}
+
         <ul className="flex items-center flex-shrink-0 space-x-6">
           {/* <!-- Theme toggler --> */}
           <li className="flex">

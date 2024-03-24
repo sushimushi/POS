@@ -2,50 +2,27 @@ import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { Input, Button } from "@windmill/react-ui";
+import { useQuery } from "react-query";
+import axiosClient from "../../apiClient";
 
-const ProductData = [
-  { name: "Burger", price: "100.00" },
-  { name: "Pizza", price: "100.00" },
-  { name: "Biryani", price: "100.00" },
-  { name: "Dahi", price: "100.00" },
-  { name: "Mango Shake", price: "100.00" },
-  { name: "DBC", price: "100.00" },
-  { name: "Burger", pice: "100.00" },
-  { name: "Pizza", price: "100.00" },
-  { name: "Biryani", price: "100.00" },
-  { name: "Dahi", price: "100.00" },
-  { name: "Mango Shake", price: "100.00" },
-  { name: "DBC", price: "100.00" },
-  { name: "Burger", pice: "100.00" },
-  { name: "Pizza", price: "100.00" },
-  { name: "Biryani", price: "100.00" },
-  { name: "Dahi", price: "100.00" },
-  { name: "Mango Shake", price: "100.00" },
-  { name: "DBC", price: "100.00" },
-  { name: "Burger", pice: "100.00" },
-  { name: "Pizza", price: "100.00" },
-  { name: "Biryani", price: "100.00" },
-  { name: "Dahi", price: "100.00" },
-  { name: "Mango Shake", price: "100.00" },
-  { name: "DBC", price: "100.00" },
-  { name: "Burger", pice: "100.00" },
-  { name: "Pizza", price: "100.00" },
-  { name: "Biryani", price: "100.00" },
-  { name: "Dahi", price: "100.00" },
-  { name: "Mango Shake", price: "100.00" },
-  { name: "DBC", price: "100.00" },
-  { name: "Burger", pice: "100.00" },
-  { name: "Pizza", price: "100.00" },
-  { name: "Biryani", price: "100.00" },
-  { name: "Dahi", price: "100.00" },
-  { name: "Mango Shake", price: "100.00" },
-  { name: "DBC", price: "100.00" },
-  { name: "Vanilla Ice Cream", price: "100.00" },
-];
+const ProductData = [];
 
 function Order() {
   const { register, control, handleSubmit, watch, formState } = useForm();
   const [orderData, setOrderData] = useState([]);
+
+  const productlist = useQuery(() => {
+    return axiosClient.get("/products/", {
+      params: {
+        filter: {
+          where: {
+            // accountId: accountId,
+            // registerId: currentRegisterId,
+          },
+        },
+      },
+    });
+  });
 
   return (
     <div className="px-4 py-4 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800 lg:grid grid-cols-[200px,1fr]">
